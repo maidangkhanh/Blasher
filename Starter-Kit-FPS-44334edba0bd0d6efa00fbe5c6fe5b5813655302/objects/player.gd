@@ -33,12 +33,16 @@ var tween:Tween
 
 signal health_updated
 
+signal ammo_updated(ammo_description)
+signal finished_reload
+
 @onready var camera = $Head/Camera
 @onready var raycast = $Head/Camera/RayCast
 @onready var muzzle = $Head/Camera/SubViewportContainer/SubViewport/CameraItem/Muzzle
 @onready var container = $Head/Camera/SubViewportContainer/SubViewport/CameraItem/Container
 @onready var sound_footsteps = $SoundFootsteps
 @onready var blaster_cooldown = $Cooldown
+@onready var reload_timer = $"Reload Timer"
 
 @export var crosshair:TextureRect
 
@@ -56,6 +60,8 @@ func _physics_process(delta):
 	
 	handle_controls(delta)
 	handle_gravity(delta)
+	
+
 	
 	# Movement
 
@@ -126,12 +132,15 @@ func handle_controls(_delta):
 	
 	movement_velocity = input.normalized() * movement_speed
 	
-
-	
 	# Shooting
 	
 	action_shoot()
-	
+	# HUD displaying
+	if weapon != null:
+		if weapon.mag_empty() && reload_timer.is_stopped():
+			print("got here")
+			finished_reload.emit() # Signaling reloading is completed
+
 	# Jumping
 	
 	if Input.is_action_just_pressed("jump"):
@@ -176,7 +185,12 @@ func action_shoot():
 	
 	if Input.is_action_pressed("shoot"):
 	
-		if !blaster_cooldown.is_stopped(): return # Cooldown for shooting
+		if !blaster_cooldown.is_stopped() or !reload_timer.is_stopped(): return # Cooldown for shooting or in reloading
+		
+		# Auto reload if press shoot while magazine is empty
+		if weapon.mag_empty() and reload_timer.is_stopped():
+			start_reload()
+			return
 		
 		Audio.play(weapon.sound_shoot)
 		
@@ -197,7 +211,8 @@ func action_shoot():
 		blaster_cooldown.start(weapon.cooldown)
 		
 		# Shoot the weapon, amount based on shot count
-		
+		weapon.shoot()
+		ammo_update()
 		for n in weapon.shot_count:
 		
 			raycast.target_position.x = randf_range(-weapon.spread, weapon.spread)
@@ -236,6 +251,7 @@ func action_weapon_toggle():
 		initiate_change_weapon(weapon_index)
 		
 		Audio.play("sounds/weapon_change.ogg")
+		ammo_update()
 
 # Initiates the weapon changing animation (tween)
 
@@ -276,11 +292,21 @@ func change_weapon():
 	
 	raycast.target_position = Vector3(0, 0, -1) * weapon.max_distance
 	crosshair.texture = weapon.crosshair
+	ammo_update()
 
 func damage(amount):
-	
 	health -= amount
 	health_updated.emit(health) # Update health on HUD
 	
 	if health < 0:
 		get_tree().reload_current_scene() # Reset when out of health
+
+func start_reload():
+	reload_timer.start(weapon.reload_time)
+
+func ammo_update():	
+	ammo_updated.emit(str(weapon.current_ammo) + " / " + str(weapon.max_ammo))
+
+func _on_finished_reload():
+	weapon.reload()
+	ammo_update()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://dxvvlck8lej3f"]
+[gd_scene load_steps=12 format=3 uid="uid://dxvvlck8lej3f"]
 
 [ext_resource type="Environment" uid="uid://jvmpkdwaeaq" path="res://scenes/main-environment.tres" id="1_q8fpv"]
 [ext_resource type="PackedScene" uid="uid://dl2ed4gkybggf" path="res://objects/player.tscn" id="2_elriq"]
@@ -11,6 +11,12 @@
 [ext_resource type="PackedScene" uid="uid://d2g78tpqbyf5g" path="res://objects/enemy.tscn" id="8_7ty2f"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_fpmwk"]
+font = ExtResource("3_w27de")
+font_size = 36
+outline_size = 12
+outline_color = Color(0, 0, 0, 0.470588)
+
+[sub_resource type="LabelSettings" id="LabelSettings_dq8fl"]
 font = ExtResource("3_w27de")
 font_size = 36
 outline_size = 12
@@ -57,6 +63,16 @@ size_flags_vertical = 8
 text = "100%"
 label_settings = SubResource("LabelSettings_fpmwk")
 vertical_alignment = 2
+
+[node name="Gun HUD" type="Node" parent="HUD"]
+
+[node name="Ammo" type="Label" parent="HUD/Gun HUD"]
+offset_left = 1100.0
+offset_top = 627.0
+offset_right = 1229.0
+offset_bottom = 672.0
+text = "30 / 30"
+label_settings = SubResource("LabelSettings_dq8fl")
 
 [node name="Enemies" type="Node" parent="."]
 
@@ -119,4 +135,5 @@ transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 
 
 [node name="Decoration" type="Node" parent="."]
 
+[connection signal="ammo_updated" from="Player" to="HUD" method="_on_player_ammo_updated"]
 [connection signal="health_updated" from="Player" to="HUD" method="_on_health_updated"]
