@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://dl2ed4gkybggf"]
+[gd_scene load_steps=9 format=3 uid="uid://dl2ed4gkybggf"]
 
 [ext_resource type="Script" path="res://objects/player.gd" id="1_ffboj"]
 [ext_resource type="Resource" uid="uid://cu2gtxlcmbb34" path="res://weapons/blaster-repeater.tres" id="2_6epbw"]
@@ -11,8 +11,23 @@
 radius = 0.3
 height = 1.0
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_20e0v"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/sync = true
+properties/0/watch = false
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/sync = true
+properties/1/watch = false
+properties/2/path = NodePath("Head/Camera:rotation")
+properties/2/spawn = true
+properties/2/sync = true
+properties/2/watch = false
+
 [node name="Player" type="CharacterBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+collision_layer = 2
 script = ExtResource("1_ffboj")
 weapons = Array[Resource("res://scripts/weapon.gd")]([ExtResource("2_6epbw"), ExtResource("3_kr4p8")])
 
@@ -59,6 +74,7 @@ frame = 2
 [node name="RayCast" type="RayCast3D" parent="Head/Camera"]
 exclude_parent = false
 target_position = Vector3(0, 0, -10)
+collision_mask = 2
 collide_with_areas = true
 
 [node name="Shadow" type="Decal" parent="."]
@@ -77,5 +93,9 @@ autoplay = true
 one_shot = true
 
 [node name="Reload Timer" type="Timer" parent="."]
+one_shot = true
 
-[connection signal="finished_reload" from="." to="." method="_on_finished_reload"]
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_20e0v")
+
+[connection signal="timeout" from="Reload Timer" to="." method="_on_reload_timer_timeout"]

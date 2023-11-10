@@ -34,7 +34,9 @@ var tween:Tween
 signal health_updated
 
 signal ammo_updated(ammo_description)
-signal finished_reload
+signal reloading_start(reload_time)
+signal reloading_finish
+signal reload_interupt
 
 @onready var camera = $Head/Camera
 @onready var raycast = $Head/Camera/RayCast
@@ -46,22 +48,25 @@ signal finished_reload
 
 @export var crosshair:TextureRect
 
-# Functions
+func _enter_tree():
+	#set_multiplayer_authority(str(name).to_int())
+	pass
 
+# Functions
 func _ready():
+	#if not is_multiplayer_authority(): return
 	
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	camera.current = true
 	
 	initiate_change_weapon(weapon_index)
 
 func _physics_process(delta):
-	
+	if not is_multiplayer_authority(): return
 	# Handle functions
 	
 	handle_controls(delta)
 	handle_gravity(delta)
-	
-
 	
 	# Movement
 
@@ -75,7 +80,7 @@ func _physics_process(delta):
 	velocity = applied_velocity
 	move_and_slide()
 	
-	# Rotation
+	# Reset weapon container position after recoil
 		
 	container.position = lerp(container.position, container_offset - (applied_velocity / 30), delta * 20)
 	
@@ -100,11 +105,11 @@ func _physics_process(delta):
 	# Falling/respawning
 	
 	if position.y < -10:
-		get_tree().reload_current_scene()
+		reset_scence()
 
 # Mouse movement
-
 func _input(event):
+	#if not is_multiplayer_authority(): return
 	if event is InputEventMouseMotion and mouse_captured:
 		
 		rotate_y(-event.relative.x * .005)
@@ -132,14 +137,11 @@ func handle_controls(_delta):
 	
 	movement_velocity = input.normalized() * movement_speed
 	
-	# Shooting
+	# Reloading
+	action_reload()
 	
+	# Shooting
 	action_shoot()
-	# HUD displaying
-	if weapon != null:
-		if weapon.mag_empty() && reload_timer.is_stopped():
-			print("got here")
-			finished_reload.emit() # Signaling reloading is completed
 
 	# Jumping
 	
@@ -160,7 +162,6 @@ func handle_controls(_delta):
 	action_weapon_toggle()
 
 # Handle gravity
-
 func handle_gravity(delta):
 	
 	gravity += 20 * delta
@@ -171,7 +172,6 @@ func handle_gravity(delta):
 		gravity = 0
 
 # Jumping
-
 func action_jump():
 	
 	gravity = -jump_strength
@@ -180,25 +180,25 @@ func action_jump():
 	jump_double = true;
 
 # Shooting
-
 func action_shoot():
 	
 	if Input.is_action_pressed("shoot"):
-	
-		if !blaster_cooldown.is_stopped() or !reload_timer.is_stopped(): return # Cooldown for shooting or in reloading
-		
+
+		# Cooldown for shooting or in reloading
+		# Also NULL check for weapon
+		if !blaster_cooldown.is_stopped() or !reload_timer.is_stopped() or weapon == null: return 
+
 		# Auto reload if press shoot while magazine is empty
 		if weapon.mag_empty() and reload_timer.is_stopped():
 			start_reload()
 			return
-		
+
 		Audio.play(weapon.sound_shoot)
 		
 		# Recoil
 		container.position.z += 0.25 # Knockback of weapon visual
 		camera.rotation.x += randf_range(0.015, 0.03) # Knockback of camera vertically
 		camera.rotation.y += randf_range(-0.005, 0.005) # Knockback of camera horizontally
-		#movement_velocity += Vector3(0, 0, weapon.knockback) # Knockback
 		
 		# Set muzzle flash position, play animation
 		
@@ -224,13 +224,11 @@ func action_shoot():
 			
 			var collider = raycast.get_collider()
 			
-			# Hitting an enemy
-			
+			# Hitting an enemy			
 			if collider.has_method("damage"):
 				collider.damage(weapon.damage)
 			
-			# Creating an impact animation
-			
+			# Creating an impact animation			
 			var impact = preload("res://objects/impact.tscn")
 			var impact_instance = impact.instantiate()
 			
@@ -242,7 +240,6 @@ func action_shoot():
 			impact_instance.look_at(camera.global_transform.origin, Vector3.UP, true) 
 
 # Toggle between available weapons (listed in 'weapons')
-
 func action_weapon_toggle():
 	
 	if Input.is_action_just_pressed("weapon_toggle"):
@@ -251,10 +248,14 @@ func action_weapon_toggle():
 		initiate_change_weapon(weapon_index)
 		
 		Audio.play("sounds/weapon_change.ogg")
-		ammo_update()
+
+# Reload weapon
+func action_reload():
+	if Input.is_action_just_pressed("reload"):
+		if weapon.current_ammo < weapon.max_ammo:
+			start_reload()
 
 # Initiates the weapon changing animation (tween)
-
 func initiate_change_weapon(index):
 	
 	weapon_index = index
@@ -265,11 +266,10 @@ func initiate_change_weapon(index):
 	tween.tween_callback(change_weapon) # Changes the model
 
 # Switches the weapon model (off-screen)
-
-func change_weapon():
-	
+func change_weapon():	
+	interupt_reload()
 	weapon = weapons[weapon_index]
-
+	
 	# Step 1. Remove previous weapon model(s) from container
 	
 	for n in container.get_children():
@@ -299,14 +299,27 @@ func damage(amount):
 	health_updated.emit(health) # Update health on HUD
 	
 	if health < 0:
-		get_tree().reload_current_scene() # Reset when out of health
+		reset_scence() # Reset when out of health
 
-func start_reload():
-	reload_timer.start(weapon.reload_time)
-
+# HUD ammo update
 func ammo_update():	
 	ammo_updated.emit(str(weapon.current_ammo) + " / " + str(weapon.max_ammo))
 
-func _on_finished_reload():
+func start_reload():
+	# TODO: reload sound
+	reload_timer.start(weapon.reload_time)
+	reloading_start.emit(weapon.reload_time)
+
+func _on_reload_timer_timeout():
 	weapon.reload()
 	ammo_update()
+	reloading_finish.emit()
+		
+func interupt_reload():
+	reload_timer.stop()
+	reload_interupt.emit()
+
+func reset_scence():
+	for _weapon in weapons:
+		_weapon.current_ammo = _weapon.max_ammo
+	get_tree().reload_current_scene()

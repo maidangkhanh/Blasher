@@ -1,5 +1,6 @@
-[gd_scene load_steps=12 format=3 uid="uid://dxvvlck8lej3f"]
+[gd_scene load_steps=15 format=3 uid="uid://dxvvlck8lej3f"]
 
+[ext_resource type="Script" path="res://scenes/main.gd" id="1_lohhv"]
 [ext_resource type="Environment" uid="uid://jvmpkdwaeaq" path="res://scenes/main-environment.tres" id="1_q8fpv"]
 [ext_resource type="PackedScene" uid="uid://dl2ed4gkybggf" path="res://objects/player.tscn" id="2_elriq"]
 [ext_resource type="Script" path="res://scripts/hud.gd" id="3_s8mkj"]
@@ -22,7 +23,14 @@ font_size = 36
 outline_size = 12
 outline_color = Color(0, 0, 0, 0.470588)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_viv68"]
+bg_color = Color(0, 0, 0, 0.705882)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7rt5i"]
+bg_color = Color(0, 1, 0, 1)
+
 [node name="Main" type="Node3D"]
+script = ExtResource("1_lohhv")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource("1_q8fpv")
@@ -73,6 +81,28 @@ offset_right = 1229.0
 offset_bottom = 672.0
 text = "30 / 30"
 label_settings = SubResource("LabelSettings_dq8fl")
+
+[node name="ReloadingBar" type="ProgressBar" parent="HUD/Gun HUD"]
+visible = false
+offset_left = 1102.0
+offset_top = 586.0
+offset_right = 1218.0
+offset_bottom = 613.0
+theme_override_styles/background = SubResource("StyleBoxFlat_viv68")
+theme_override_styles/fill = SubResource("StyleBoxFlat_7rt5i")
+show_percentage = false
+
+[node name="ReloadingText" type="Label" parent="HUD/Gun HUD"]
+visible = false
+offset_left = 1080.0
+offset_top = 537.0
+offset_right = 1235.0
+offset_bottom = 582.0
+text = "Reloading"
+label_settings = SubResource("LabelSettings_dq8fl")
+
+[node name="ReloadTimer" type="Timer" parent="HUD/Gun HUD"]
+one_shot = true
 
 [node name="Enemies" type="Node" parent="."]
 
@@ -135,5 +165,12 @@ transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 
 
 [node name="Decoration" type="Node" parent="."]
 
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://objects/player.tscn")
+spawn_path = NodePath("..")
+
 [connection signal="ammo_updated" from="Player" to="HUD" method="_on_player_ammo_updated"]
 [connection signal="health_updated" from="Player" to="HUD" method="_on_health_updated"]
+[connection signal="reload_interupt" from="Player" to="HUD" method="_on_player_reload_interupt"]
+[connection signal="reloading_finish" from="Player" to="HUD" method="_on_player_reloading_finish"]
+[connection signal="reloading_start" from="Player" to="HUD" method="_on_player_reloading_start"]
