@@ -32,3 +32,7 @@ func _on_player_reload_interupt():
 	reloading_bar.hide()
 	reloading_text.hide()
 	reload_timer.stop()
+
+
+func _on_player_health_updated():
+	pass # Replace with function body.

@@ -59,6 +59,7 @@ func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	camera.current = true
 	
+	crosshair = get_node("HUD/Crosshair")
 	initiate_change_weapon(weapon_index)
 
 func _physics_process(delta):

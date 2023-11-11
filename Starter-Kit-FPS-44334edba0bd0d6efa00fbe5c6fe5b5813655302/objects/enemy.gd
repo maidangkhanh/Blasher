@@ -14,11 +14,11 @@ var destroyed := false
 # When ready, save the initial position
 
 func _ready():
-	
+	player =  get_node("./Player")
 	target_position = position
 
 func _process(delta):
-	
+	if(player == null): return
 	self.look_at(player.position + Vector3(0, 0.5, 0), Vector3.UP, true) # Look at player
 	target_position.y += (cos(time * 5) * 1) * delta # Sine movement (up and down)
 	
