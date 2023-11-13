@@ -49,12 +49,12 @@ signal reload_interupt
 @export var crosshair:TextureRect
 
 func _enter_tree():
-	#set_multiplayer_authority(str(name).to_int())
-	pass
+	set_multiplayer_authority(str(name).to_int())
+
 
 # Functions
 func _ready():
-	#if not is_multiplayer_authority(): return
+	if not is_multiplayer_authority(): return
 	
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	camera.current = true
@@ -91,26 +91,30 @@ func _physics_process(delta):
 	
 	if is_on_floor():
 		if abs(velocity.x) > 1 or abs(velocity.z) > 1:
+			if sound_footsteps.autoplay != true: # Movement sound enable on first step
+				sound_footsteps.autoplay = true
+				sound_footsteps.play()
 			sound_footsteps.stream_paused = false
 	
 	# Landing after jump or falling
 	
-	camera.position.y = lerp(camera.position.y, 0.0, delta * 5)
+	# camera.position.y = lerp(camera.position.y, 0.0, delta * 5)
 	
 	if is_on_floor() and gravity > 1 and !previously_floored: # Landed
 		Audio.play("sounds/land.ogg")
-		camera.position.y = -0.1
+		#camera.position.y = -0.1
 	
 	previously_floored = is_on_floor()
 	
 	# Falling/respawning
 	
-	if position.y < -10:
-		reset_scence()
+	# TODO: fix handle death
+	# if position.y < -10:
+	# 	reset_scence()
 
 # Mouse movement
-func _input(event):
-	#if not is_multiplayer_authority(): return
+func _unhandled_input(event):
+	if not is_multiplayer_authority(): return
 	if event is InputEventMouseMotion and mouse_captured:
 		
 		rotate_y(-event.relative.x * .005)
@@ -299,8 +303,8 @@ func damage(amount):
 	health -= amount
 	health_updated.emit(health) # Update health on HUD
 	
-	if health < 0:
-		reset_scence() # Reset when out of health
+	# if health < 0:
+	# 	reset_scence() # Reset when out of health
 
 # HUD ammo update
 func ammo_update():	

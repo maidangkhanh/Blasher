@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dl2ed4gkybggf"]
+[gd_scene load_steps=11 format=3 uid="uid://dl2ed4gkybggf"]
 
 [ext_resource type="Script" path="res://objects/player.gd" id="1_ffboj"]
 [ext_resource type="Resource" uid="uid://cu2gtxlcmbb34" path="res://weapons/blaster-repeater.tres" id="2_6epbw"]
@@ -8,16 +8,18 @@
 [ext_resource type="SpriteFrames" uid="uid://dbv3sy5qjatnl" path="res://sprites/burst_animation.tres" id="4_m6ukc"]
 [ext_resource type="AudioStream" uid="uid://cydjn1ct3hps2" path="res://sounds/walking.ogg" id="5_ics1s"]
 
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_3aoqg"]
+
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_gdq8c"]
 radius = 0.3
 height = 1.0
 
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_20e0v"]
-properties/0/path = NodePath(".:position")
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_3ocir"]
+properties/0/path = NodePath(".:rotation")
 properties/0/spawn = true
 properties/0/sync = true
 properties/0/watch = false
-properties/1/path = NodePath(".:rotation")
+properties/1/path = NodePath(".:position")
 properties/1/spawn = true
 properties/1/sync = true
 properties/1/watch = false
@@ -33,6 +35,10 @@ script = ExtResource("1_ffboj")
 weapons = Array[Resource("res://scripts/weapon.gd")]([ExtResource("2_6epbw"), ExtResource("3_kr4p8")])
 
 [node name="HUD" parent="." instance=ExtResource("4_di3q1")]
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
+mesh = SubResource("CapsuleMesh_3aoqg")
 
 [node name="Collider" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
@@ -77,7 +83,7 @@ frame = 2
 [node name="RayCast" type="RayCast3D" parent="Head/Camera"]
 exclude_parent = false
 target_position = Vector3(0, 0, -10)
-collision_mask = 2
+collision_mask = 3
 collide_with_areas = true
 
 [node name="Shadow" type="Decal" parent="."]
@@ -90,7 +96,6 @@ normal_fade = 0.5
 [node name="SoundFootsteps" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_ics1s")
 volume_db = -5.0
-autoplay = true
 
 [node name="Cooldown" type="Timer" parent="."]
 one_shot = true
@@ -99,7 +104,7 @@ one_shot = true
 one_shot = true
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
-replication_config = SubResource("SceneReplicationConfig_20e0v")
+replication_config = SubResource("SceneReplicationConfig_3ocir")
 
 [connection signal="ammo_updated" from="." to="HUD" method="_on_player_ammo_updated"]
 [connection signal="health_updated" from="." to="HUD" method="_on_player_health_updated"]

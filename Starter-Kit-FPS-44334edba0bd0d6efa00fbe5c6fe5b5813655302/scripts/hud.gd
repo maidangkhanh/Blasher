@@ -5,9 +5,6 @@ extends CanvasLayer
 @onready var reloading_bar = $"Gun HUD/ReloadingBar"
 @onready var reload_timer = $"Gun HUD/ReloadTimer"
 
-func _on_health_updated(health):
-	$Health.text = str(health) + "%"
-
 func _on_player_ammo_updated(ammo_description):
 	ammo_hud.text = str(ammo_description)
 
@@ -24,7 +21,7 @@ func _on_player_reloading_start(reload_time):
 	reloading_bar.show()
 	reloading_text.show()
 
-func _process(delta):
+func _process(_delta):
 	reloading_bar.value = reloading_bar.max_value - reload_timer.time_left
 
 
@@ -34,5 +31,5 @@ func _on_player_reload_interupt():
 	reload_timer.stop()
 
 
-func _on_player_health_updated():
-	pass # Replace with function body.
+func _on_player_health_updated(health):
+	$Health.text = str(health) + "%"
