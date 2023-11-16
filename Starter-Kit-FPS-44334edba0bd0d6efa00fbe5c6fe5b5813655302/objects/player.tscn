@@ -1,10 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://dl2ed4gkybggf"]
+[gd_scene load_steps=10 format=3 uid="uid://dl2ed4gkybggf"]
 
 [ext_resource type="Script" path="res://objects/player.gd" id="1_ffboj"]
 [ext_resource type="Resource" uid="uid://cu2gtxlcmbb34" path="res://weapons/blaster-repeater.tres" id="2_6epbw"]
 [ext_resource type="Texture2D" uid="uid://8ggihh27mlrr" path="res://sprites/blob_shadow.png" id="2_b0fo8"]
 [ext_resource type="Resource" uid="uid://c56y8pqoyk15f" path="res://weapons/blaster.tres" id="3_kr4p8"]
-[ext_resource type="PackedScene" uid="uid://cfd7c0lk857ng" path="res://objects/hud.tscn" id="4_di3q1"]
 [ext_resource type="SpriteFrames" uid="uid://dbv3sy5qjatnl" path="res://sprites/burst_animation.tres" id="4_m6ukc"]
 [ext_resource type="AudioStream" uid="uid://cydjn1ct3hps2" path="res://sounds/walking.ogg" id="5_ics1s"]
 
@@ -34,8 +33,6 @@ collision_layer = 2
 script = ExtResource("1_ffboj")
 weapons = Array[Resource("res://scripts/weapon.gd")]([ExtResource("2_6epbw"), ExtResource("3_kr4p8")])
 
-[node name="HUD" parent="." instance=ExtResource("4_di3q1")]
-
 [node name="Mesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
 mesh = SubResource("CapsuleMesh_3aoqg")
@@ -47,9 +44,10 @@ shape = SubResource("CapsuleShape3D_gdq8c")
 [node name="Head" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
+[node name="# DO NOT ENABLE CURRENT ON CAMERA" type="Node" parent="Head"]
+
 [node name="Camera" type="Camera3D" parent="Head"]
 cull_mask = 1048573
-current = true
 fov = 80.0
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="Head/Camera"]
@@ -86,6 +84,8 @@ target_position = Vector3(0, 0, -10)
 collision_mask = 3
 collide_with_areas = true
 
+[node name="TPSGraphic" type="Node3D" parent="Head/Camera"]
+
 [node name="Shadow" type="Decal" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.9, 0)
 size = Vector3(1, 2, 1)
@@ -106,9 +106,4 @@ one_shot = true
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_3ocir")
 
-[connection signal="ammo_updated" from="." to="HUD" method="_on_player_ammo_updated"]
-[connection signal="health_updated" from="." to="HUD" method="_on_player_health_updated"]
-[connection signal="reload_interupt" from="." to="HUD" method="_on_player_reload_interupt"]
-[connection signal="reloading_finish" from="." to="HUD" method="_on_player_reloading_finish"]
-[connection signal="reloading_start" from="." to="HUD" method="_on_player_reloading_start"]
 [connection signal="timeout" from="Reload Timer" to="." method="_on_reload_timer_timeout"]

@@ -1,4 +1,4 @@
-extends CanvasLayer
+extends Node
 
 @onready var ammo_hud = $"Gun HUD/Ammo"
 @onready var reloading_text = $"Gun HUD/ReloadingText"
@@ -7,7 +7,6 @@ extends CanvasLayer
 
 func _on_player_ammo_updated(ammo_description):
 	ammo_hud.text = str(ammo_description)
-
 
 func _on_player_reloading_finish():
 	reloading_bar.hide()

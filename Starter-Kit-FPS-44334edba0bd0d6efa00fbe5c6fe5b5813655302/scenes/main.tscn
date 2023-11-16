@@ -1,11 +1,31 @@
-[gd_scene load_steps=7 format=3 uid="uid://dxvvlck8lej3f"]
+[gd_scene load_steps=13 format=3 uid="uid://dxvvlck8lej3f"]
 
 [ext_resource type="Script" path="res://scenes/main.gd" id="1_lohhv"]
 [ext_resource type="Environment" uid="uid://jvmpkdwaeaq" path="res://scenes/main-environment.tres" id="1_q8fpv"]
+[ext_resource type="Script" path="res://scripts/hud.gd" id="2_hgkro"]
+[ext_resource type="FontFile" uid="uid://biqtga8moh7ah" path="res://fonts/lilita_one_regular.ttf" id="3_ywv7x"]
 [ext_resource type="PackedScene" uid="uid://dpm3l05d7fu35" path="res://objects/platform.tscn" id="5_3s40e"]
 [ext_resource type="PackedScene" uid="uid://r7rt7pth4u7o" path="res://objects/wall_low.tscn" id="5_6vel1"]
 [ext_resource type="PackedScene" uid="uid://c71evdjblk5wp" path="res://objects/wall_high.tscn" id="7_cabne"]
 [ext_resource type="PackedScene" uid="uid://bvx5cvigosg0s" path="res://objects/platform_large_grass.tscn" id="7_wggef"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_hjpmg"]
+font = ExtResource("3_ywv7x")
+font_size = 36
+outline_size = 12
+outline_color = Color(0, 0, 0, 0.470588)
+
+[sub_resource type="LabelSettings" id="LabelSettings_hwgvc"]
+font = ExtResource("3_ywv7x")
+font_size = 36
+outline_size = 12
+outline_color = Color(0, 0, 0, 0.470588)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3h1bp"]
+bg_color = Color(0, 0, 0, 0.705882)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gbcyq"]
+bg_color = Color(0, 1, 0, 1)
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_lohhv")
@@ -53,6 +73,61 @@ text = "Join"
 layout_mode = 2
 placeholder_text = "Adress"
 alignment = 1
+
+[node name="HUD" type="PanelContainer" parent="CanvasLayer"]
+visible = false
+self_modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_hgkro")
+
+[node name="Health" type="Label" parent="CanvasLayer/HUD"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+text = "100%"
+label_settings = SubResource("LabelSettings_hjpmg")
+vertical_alignment = 2
+
+[node name="Gun HUD" type="VBoxContainer" parent="CanvasLayer/HUD"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+alignment = 1
+
+[node name="ReloadingText" type="Label" parent="CanvasLayer/HUD/Gun HUD"]
+visible = false
+layout_mode = 2
+text = "Reloading"
+label_settings = SubResource("LabelSettings_hwgvc")
+
+[node name="ReloadingBar" type="ProgressBar" parent="CanvasLayer/HUD/Gun HUD"]
+visible = false
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_3h1bp")
+theme_override_styles/fill = SubResource("StyleBoxFlat_gbcyq")
+show_percentage = false
+
+[node name="Ammo" type="Label" parent="CanvasLayer/HUD/Gun HUD"]
+layout_mode = 2
+text = "30 / 30"
+label_settings = SubResource("LabelSettings_hwgvc")
+
+[node name="ReloadTimer" type="Timer" parent="CanvasLayer/HUD/Gun HUD"]
+one_shot = true
+
+[node name="Crosshair" type="TextureRect" parent="CanvasLayer"]
+visible = false
+offset_left = 640.0
+offset_top = 360.0
+offset_right = 640.0
+offset_bottom = 360.0
+scale = Vector2(0.35, 0.35)
+size_flags_horizontal = 4
+size_flags_vertical = 4
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource("1_q8fpv")
@@ -107,9 +182,12 @@ transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 
 
 [node name="Decoration" type="Node" parent="."]
 
+[node name="Players" type="Node" parent="."]
+
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://objects/player.tscn")
-spawn_path = NodePath("..")
+spawn_path = NodePath("../Players")
 
 [connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
+[connection signal="spawned" from="MultiplayerSpawner" to="." method="_on_multiplayer_spawner_spawned"]

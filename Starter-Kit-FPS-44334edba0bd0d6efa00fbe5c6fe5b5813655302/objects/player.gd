@@ -31,8 +31,7 @@ var container_offset = Vector3(1.2, -1.1, -2.75)
 
 var tween:Tween
 
-signal health_updated
-
+signal health_updated(health)
 signal ammo_updated(ammo_description)
 signal reloading_start(reload_time)
 signal reloading_finish
@@ -45,6 +44,7 @@ signal reload_interupt
 @onready var sound_footsteps = $SoundFootsteps
 @onready var blaster_cooldown = $Cooldown
 @onready var reload_timer = $"Reload Timer"
+@onready var tps_graphic = $"Head/Camera/TPSGraphic"
 
 @export var crosshair:TextureRect
 
@@ -59,11 +59,12 @@ func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	camera.current = true
 	
-	crosshair = get_node("HUD/Crosshair")
+	crosshair = get_tree().root.get_node("Main/CanvasLayer/Crosshair")
 	initiate_change_weapon(weapon_index)
 
 func _physics_process(delta):
 	if not is_multiplayer_authority(): return
+	
 	# Handle functions
 	
 	handle_controls(delta)
@@ -113,10 +114,10 @@ func _physics_process(delta):
 	# 	reset_scence()
 
 # Mouse movement
-func _unhandled_input(event):
+func _input(event):
 	if not is_multiplayer_authority(): return
+	
 	if event is InputEventMouseMotion and mouse_captured:
-		
 		rotate_y(-event.relative.x * .005)
 		camera.rotate_x(-event.relative.y * .005)
 		camera.rotation.x = clamp(camera.rotation.x, -PI/2, PI/2)
@@ -328,3 +329,12 @@ func reset_scence():
 	for _weapon in weapons:
 		_weapon.current_ammo = _weapon.max_ammo
 	get_tree().reload_current_scene()
+
+@rpc("call_remote")
+func handle_tps_graphic():
+	for n in tps_graphic.get_children():
+		tps_graphic.remove_child(n)
+	
+	var weapon_model = weapon.model.instantiate()
+	tps_graphic.add_child(weapon_model)
+	weapon_model.rotation = camera.rotation
