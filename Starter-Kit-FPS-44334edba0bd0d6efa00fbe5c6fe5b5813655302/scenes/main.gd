@@ -4,7 +4,6 @@ extends Node
 @onready var address_entry = $CanvasLayer/MainMenu/MarginContainer/VBoxContainer/AddressEntry
 @onready var players = $Players
 @onready var hud = $CanvasLayer/HUD
-@onready var crosshair = $CanvasLayer/Crosshair
 
 const Player = preload("res://objects/player.tscn")
 const PORT = 9999
@@ -14,7 +13,6 @@ var enet_peer = ENetMultiplayerPeer.new()
 func _on_host_button_pressed():
 	main_menu.hide()
 	hud.show()
-	crosshair.show()
 	
 	enet_peer.create_server(PORT)
 	multiplayer.multiplayer_peer = enet_peer
@@ -28,7 +26,6 @@ func _on_host_button_pressed():
 func _on_join_button_pressed():
 	main_menu.hide()
 	hud.show()
-	crosshair.show()
 	
 	enet_peer.create_client("localhost", PORT)
 	multiplayer.multiplayer_peer = enet_peer
@@ -73,4 +70,3 @@ func connect_signals(node):
 		node.reloading_finish.connect(hud._on_player_reloading_finish)
 		node.reload_interupt.connect(hud._on_player_reload_interupt)
 		node.health_updated.connect(hud._on_player_health_updated)
-	

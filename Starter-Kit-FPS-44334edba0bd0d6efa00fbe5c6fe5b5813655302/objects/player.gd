@@ -31,7 +31,7 @@ var container_offset = Vector3(1.2, -1.1, -2.75)
 
 var tween:Tween
 
-signal health_updated(health)
+signal health_updated(health_value)
 signal ammo_updated(ammo_description)
 signal reloading_start(reload_time)
 signal reloading_finish
@@ -59,7 +59,8 @@ func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	camera.current = true
 	
-	crosshair = get_tree().root.get_node("Main/CanvasLayer/Crosshair")
+	health_updated.emit()
+	crosshair = get_tree().root.get_node("Main/CanvasLayer/HUD/Crosshair")
 	initiate_change_weapon(weapon_index)
 
 func _physics_process(delta):
@@ -122,8 +123,7 @@ func _input(event):
 		camera.rotate_x(-event.relative.y * .005)
 		camera.rotation.x = clamp(camera.rotation.x, -PI/2, PI/2)
 
-func handle_controls(_delta):
-	
+func handle_controls(_delta):	
 	# Mouse capture
 	
 	if Input.is_action_just_pressed("mouse_capture"):
@@ -249,7 +249,7 @@ func action_shoot():
 func action_weapon_toggle():
 	
 	if Input.is_action_just_pressed("weapon_toggle"):
-		
+		health_updated.emit(health)
 		weapon_index = wrap(weapon_index + 1, 0, weapons.size())
 		initiate_change_weapon(weapon_index)
 		
@@ -300,6 +300,7 @@ func change_weapon():
 	crosshair.texture = weapon.crosshair
 	ammo_update()
 
+@rpc("any_peer","reliable")
 func damage(amount):
 	health -= amount
 	health_updated.emit(health) # Update health on HUD
