@@ -1,5 +1,7 @@
 extends CharacterBody3D
 
+class_name Player
+
 @export_subgroup("Properties")
 @export var movement_speed = 5
 @export var jump_strength = 7
@@ -7,8 +9,8 @@ extends CharacterBody3D
 @export_subgroup("Weapons")
 @export var weapons: Array[Weapon] = []
 
+@export var weapon_index := 0
 var weapon: Weapon
-var weapon_index := 0
 
 var mouse_sensitivity = 700
 var mouse_captured := true
@@ -44,7 +46,7 @@ signal reload_interupt
 @onready var sound_footsteps = $SoundFootsteps
 @onready var blaster_cooldown = $Cooldown
 @onready var reload_timer = $"Reload Timer"
-@onready var tps_graphic = $"Head/Camera/TPSGraphic"
+@onready var visual = $Head/Camera/Visual
 
 @export var crosshair:TextureRect
 
@@ -62,6 +64,7 @@ func _ready():
 	health_updated.emit()
 	crosshair = get_tree().root.get_node("Main/CanvasLayer/HUD/Crosshair")
 	initiate_change_weapon(weapon_index)
+	change_weapon_visual.rpc(weapon_index)
 
 func _physics_process(delta):
 	if not is_multiplayer_authority(): return
@@ -232,7 +235,7 @@ func action_shoot():
 			
 			# Hitting an enemy			
 			if collider.has_method("damage"):
-				collider.damage(weapon.damage)
+				collider.damage.rpc(weapon.damage)
 			
 			# Creating an impact animation			
 			var impact = preload("res://objects/impact.tscn")
@@ -254,6 +257,8 @@ func action_weapon_toggle():
 		initiate_change_weapon(weapon_index)
 		
 		Audio.play("sounds/weapon_change.ogg")
+		
+		change_weapon_visual.rpc(weapon_index)
 
 # Reload weapon
 func action_reload():
@@ -269,7 +274,8 @@ func initiate_change_weapon(index):
 	tween = get_tree().create_tween()
 	tween.set_ease(Tween.EASE_OUT_IN)
 	tween.tween_property(container, "position", container_offset - Vector3(0, 1, 0), 0.1)
-	tween.tween_callback(change_weapon) # Changes the model
+	tween.tween_callback(change_weapon)# Changes the model
+
 
 # Switches the weapon model (off-screen)
 func change_weapon():	
@@ -305,8 +311,11 @@ func damage(amount):
 	health -= amount
 	health_updated.emit(health) # Update health on HUD
 	
-	# if health < 0:
-	# 	reset_scence() # Reset when out of health
+	# Respawn
+	if health <= 0:
+		health = 100
+		health_updated.emit(health)
+		position = Vector3.ZERO # Reset when out of health
 
 # HUD ammo update
 func ammo_update():	
@@ -321,7 +330,8 @@ func _on_reload_timer_timeout():
 	weapon.reload()
 	ammo_update()
 	reloading_finish.emit()
-		
+	
+
 func interupt_reload():
 	reload_timer.stop()
 	reload_interupt.emit()
@@ -331,11 +341,15 @@ func reset_scence():
 		_weapon.current_ammo = _weapon.max_ammo
 	get_tree().reload_current_scene()
 
-@rpc("call_remote")
-func handle_tps_graphic():
-	for n in tps_graphic.get_children():
-		tps_graphic.remove_child(n)
+@rpc("any_peer", "call_local")
+func change_weapon_visual(index):
+	for n in visual.get_children():
+		visual.remove_child(n)
 	
-	var weapon_model = weapon.model.instantiate()
-	tps_graphic.add_child(weapon_model)
+	var weapon_model = weapons[index].model.instantiate()
+	visual.add_child(weapon_model)
+	
 	weapon_model.rotation = camera.rotation
+
+func show_weapon_visual():
+	visual.show()

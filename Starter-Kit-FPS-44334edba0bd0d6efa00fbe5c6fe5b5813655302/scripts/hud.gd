@@ -32,6 +32,5 @@ func _on_player_reload_interupt():
 	reload_timer.stop()
 
 
-func _on_player_health_updated(health_value):
-	print("health")
+func _on_player_health_updated(health_value):	
 	health.text = str(health_value) + "%"

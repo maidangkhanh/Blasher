@@ -36,6 +36,10 @@ func add_player(peer_id):
 	players.add_child(player)
 	if player.is_multiplayer_authority():
 		connect_signals(player)
+	
+	for n in players.get_children():
+		if not n.is_multiplayer_authority():
+			n.show_weapon_visual()
 
 func remove_player(peer_id):
 	var player = get_node_or_null(str(peer_id))
@@ -60,11 +64,16 @@ func upnp_setup():
 
 
 func _on_multiplayer_spawner_spawned(node):
+	for n in players.get_children():
+		if not n.is_multiplayer_authority():
+			n.change_weapon_visual.rpc(n.weapon_index)
+			n.show_weapon_visual()
+			
 	if node.is_multiplayer_authority():
 		connect_signals(node)
 
 
-func connect_signals(node):
+func connect_signals(node:Player):
 		node.ammo_updated.connect(hud._on_player_ammo_updated)
 		node.reloading_start.connect(hud._on_player_reloading_start)
 		node.reloading_finish.connect(hud._on_player_reloading_finish)

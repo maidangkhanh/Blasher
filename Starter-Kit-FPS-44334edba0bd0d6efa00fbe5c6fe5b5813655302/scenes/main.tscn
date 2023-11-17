@@ -102,6 +102,7 @@ label_settings = SubResource("LabelSettings_hjpmg")
 vertical_alignment = 2
 
 [node name="Crosshair" type="TextureRect" parent="CanvasLayer/HUD"]
+layout_mode = 0
 offset_left = 640.0
 offset_top = 360.0
 offset_right = 640.0

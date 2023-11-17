@@ -10,8 +10,6 @@
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_3aoqg"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_gdq8c"]
-radius = 0.3
-height = 1.0
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_3ocir"]
 properties/0/path = NodePath(".:rotation")
@@ -26,6 +24,10 @@ properties/2/path = NodePath("Head/Camera:rotation")
 properties/2/spawn = true
 properties/2/sync = true
 properties/2/watch = false
+properties/3/path = NodePath(".:weapon_index")
+properties/3/spawn = true
+properties/3/sync = true
+properties/3/watch = false
 
 [node name="Player" type="CharacterBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
@@ -84,7 +86,9 @@ target_position = Vector3(0, 0, -10)
 collision_mask = 3
 collide_with_areas = true
 
-[node name="TPSGraphic" type="Node3D" parent="Head/Camera"]
+[node name="Visual" type="Node3D" parent="Head/Camera"]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, -0.3, 0.5, -0.3, -0.727)
+visible = false
 
 [node name="Shadow" type="Decal" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.9, 0)
