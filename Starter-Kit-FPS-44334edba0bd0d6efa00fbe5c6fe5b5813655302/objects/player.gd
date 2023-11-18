@@ -47,6 +47,7 @@ signal reload_interupt
 @onready var blaster_cooldown = $Cooldown
 @onready var reload_timer = $"Reload Timer"
 @onready var visual = $Head/Camera/Visual
+@onready var muzzle_flash = $Head/Camera/MuzzleFlash
 
 @export var crosshair:TextureRect
 
@@ -210,41 +211,42 @@ func action_shoot():
 		camera.rotation.y += randf_range(-0.005, 0.005) # Knockback of camera horizontally
 		
 		# Set muzzle flash position, play animation
+		play_shoot_effect.rpc()
 		
 		muzzle.play("default")
-		
+
 		muzzle.rotation_degrees.z = randf_range(-45, 45)
 		muzzle.scale = Vector3.ONE * randf_range(0.40, 0.75)
 		muzzle.position = container.position - weapon.muzzle_position
-		
+
 		blaster_cooldown.start(weapon.cooldown)
-		
+
 		# Shoot the weapon, amount based on shot count
 		weapon.shoot()
 		ammo_update()
 		for n in weapon.shot_count:
-		
+
 			raycast.target_position.x = randf_range(-weapon.spread, weapon.spread)
 			raycast.target_position.y = randf_range(-weapon.spread, weapon.spread)
-			
+
 			raycast.force_raycast_update()
-			
+
 			if !raycast.is_colliding(): continue # Don't create impact when raycast didn't hit
-			
+
 			var collider = raycast.get_collider()
-			
+
 			# Hitting an enemy			
 			if collider.has_method("damage"):
 				collider.damage.rpc(weapon.damage)
-			
+
 			# Creating an impact animation			
 			var impact = preload("res://objects/impact.tscn")
 			var impact_instance = impact.instantiate()
-			
+
 			impact_instance.play("shot")
-			
+
 			get_tree().root.add_child(impact_instance)
-			
+
 			impact_instance.position = raycast.get_collision_point() + (raycast.get_collision_normal() / 10)
 			impact_instance.look_at(camera.global_transform.origin, Vector3.UP, true) 
 
@@ -352,4 +354,40 @@ func change_weapon_visual(index):
 	weapon_model.rotation = camera.rotation
 
 func show_weapon_visual():
+	muzzle_flash.show()
 	visual.show()
+
+@rpc("call_local")
+func play_shoot_effect():
+	muzzle_flash.play("default")
+	
+	muzzle_flash.rotation_degrees.z = randf_range(-45, 45)
+	muzzle_flash.scale = Vector3.ONE * randf_range(0.40, 0.75)
+	muzzle_flash.position = visual.position - weapons[weapon_index].muzzle_position * 0.3
+
+	
+	for n in weapons[weapon_index].shot_count:
+	
+		raycast.target_position.x = randf_range(-weapons[weapon_index].spread, weapons[weapon_index].spread)
+		raycast.target_position.y = randf_range(-weapons[weapon_index].spread, weapons[weapon_index].spread)
+		
+		raycast.force_raycast_update()
+		
+		if !raycast.is_colliding(): continue # Don't create impact when raycast didn't hit
+		
+		var collider = raycast.get_collider()
+		
+		# Hitting an enemy			
+		if collider.has_method("damage"):
+			collider.damage.rpc(weapons[weapon_index].damage)
+		
+		# Creating an impact animation			
+		var impact = preload("res://objects/impact.tscn")
+		var impact_instance = impact.instantiate()
+		
+		impact_instance.play("shot")
+		
+		get_tree().root.add_child(impact_instance)
+		
+		impact_instance.position = raycast.get_collision_point() + (raycast.get_collision_normal() / 10)
+		impact_instance.look_at(camera.global_transform.origin, Vector3.UP, true) 

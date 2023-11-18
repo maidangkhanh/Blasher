@@ -79,6 +79,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, -0.75, -6)
 layers = 2
 sprite_frames = ExtResource("4_m6ukc")
 frame = 2
+frame_progress = 1.0
 
 [node name="RayCast" type="RayCast3D" parent="Head/Camera"]
 exclude_parent = false
@@ -87,8 +88,14 @@ collision_mask = 3
 collide_with_areas = true
 
 [node name="Visual" type="Node3D" parent="Head/Camera"]
-transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, -0.3, 0.5, -0.3, -0.727)
+transform = Transform3D(0.3, -2.62268e-08, 0, 2.62268e-08, 0.3, 0, 0, 0, -0.3, 0.500042, -0.280674, -0.69958)
 visible = false
+
+[node name="MuzzleFlash" type="AnimatedSprite3D" parent="Head/Camera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.50461, -0.258171, -0.699283)
+sprite_frames = ExtResource("4_m6ukc")
+frame = 2
+frame_progress = 1.0
 
 [node name="Shadow" type="Decal" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.9, 0)
