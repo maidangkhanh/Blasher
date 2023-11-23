@@ -67,16 +67,15 @@ func _ready():
 	initiate_change_weapon(weapon_index)
 	change_weapon_visual.rpc(weapon_index)
 
+
 func _physics_process(delta):
 	if not is_multiplayer_authority(): return
 	
 	# Handle functions
-	
 	handle_controls(delta)
 	handle_gravity(delta)
 	
 	# Movement
-
 	var applied_velocity: Vector3
 	
 	movement_velocity = transform.basis * movement_velocity # Move forward
@@ -87,13 +86,11 @@ func _physics_process(delta):
 	velocity = applied_velocity
 	move_and_slide()
 	
-	# Reset weapon container position after recoil
-
+	# Reset weapon container and camera position after recoil
 	container.position = lerp(container.position, container_offset - (applied_velocity / 30), delta * 20)
 	camera.rotation.x = clamp(camera.rotation.x, -PI/2, PI/2)
 	
 	# Movement sound
-	
 	sound_footsteps.stream_paused = true
 	
 	if is_on_floor():
@@ -112,7 +109,7 @@ func _physics_process(delta):
 		#camera.position.y = -0.1
 	
 	previously_floored = is_on_floor()
-	
+
 
 # Mouse movement
 func _input(event):
@@ -123,9 +120,9 @@ func _input(event):
 		camera.rotate_x(-event.relative.y * .005)
 		camera.rotation.x = clamp(camera.rotation.x, -PI/2, PI/2)
 
+
 func handle_controls(_delta):	
 	# Mouse capture
-	
 	if Input.is_action_just_pressed("mouse_capture"):
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 		mouse_captured = true
@@ -137,7 +134,6 @@ func handle_controls(_delta):
 		input_mouse = Vector2.ZERO
 	
 	# Movement
-	
 	input.x = Input.get_axis("move_left", "move_right")
 	input.z = Input.get_axis("move_forward", "move_back")
 	
@@ -163,8 +159,8 @@ func handle_controls(_delta):
 		if(jump_single): action_jump()
 		
 	# Weapon switching
-	
 	action_weapon_toggle()
+
 
 # Handle gravity
 func handle_gravity(delta):
@@ -176,6 +172,7 @@ func handle_gravity(delta):
 		jump_single = true
 		gravity = 0
 
+
 # Jumping
 func action_jump():
 	
@@ -184,9 +181,9 @@ func action_jump():
 	jump_single = false;
 	jump_double = true;
 
+
 # Shooting
-func action_shoot():
-	
+func action_shoot():	
 	if Input.is_action_pressed("shoot"):
 
 		# Cooldown for shooting or in reloading
@@ -202,8 +199,8 @@ func action_shoot():
 		
 		# Recoil
 		container.position.z += 0.25 # Knockback of weapon visual
-		camera.rotation.x += randf_range(0.015, 0.03) # Knockback of camera vertically
-		rotate_y(randf_range(-0.0075, 0.0075)) # Knockback horizontally
+		camera.rotation.x += randf_range(0.03, 0.05) * weapon.recoil_rate # Knockback of camera vertically
+		rotate_y(randf_range(-0.0075, 0.0075) * weapon.recoil_rate)  # Knockback horizontally
 		
 		# Set muzzle flash position, play animation
 		play_shoot_effect.rpc()
@@ -219,7 +216,7 @@ func action_shoot():
 		# Shoot the weapon, amount based on shot count
 		weapon.shoot()
 		ammo_update()
-#	
+
 
 # Toggle between available weapons (listed in 'weapons')
 func action_weapon_toggle():
@@ -233,15 +230,16 @@ func action_weapon_toggle():
 		
 		change_weapon_visual.rpc(weapon_index)
 
+
 # Reload weapon
 func action_reload():
 	if Input.is_action_just_pressed("reload"):
 		if weapon.current_ammo < weapon.max_ammo:
 			start_reload()
 
+
 # Initiates the weapon changing animation (tween)
 func initiate_change_weapon(index):
-	
 	weapon_index = index
 	
 	tween = get_tree().create_tween()
@@ -279,6 +277,7 @@ func change_weapon():
 	crosshair.texture = weapon.crosshair
 	ammo_update()
 
+
 @rpc("any_peer","reliable")
 func damage(amount):
 	health -= amount
@@ -290,29 +289,34 @@ func damage(amount):
 		health_updated.emit(health)
 		position = Vector3.ZERO # Reset when out of health
 
+
 # HUD ammo update
 func ammo_update():	
 	ammo_updated.emit(str(weapon.current_ammo) + " / " + str(weapon.max_ammo))
+
 
 func start_reload():
 	# TODO: reload sound
 	reload_timer.start(weapon.reload_time)
 	reloading_start.emit(weapon.reload_time)
 
+
 func _on_reload_timer_timeout():
 	weapon.reload()
 	ammo_update()
 	reloading_finish.emit()
-	
+
 
 func interupt_reload():
 	reload_timer.stop()
 	reload_interupt.emit()
 
+
 func reset_scence():
 	for _weapon in weapons:
 		_weapon.current_ammo = _weapon.max_ammo
 	get_tree().reload_current_scene()
+
 
 @rpc("any_peer", "call_local")
 func change_weapon_visual(index):
@@ -324,10 +328,13 @@ func change_weapon_visual(index):
 	
 	weapon_model.rotation = camera.rotation
 
+
 func show_weapon_visual():
 	muzzle_flash.show()
 	visual.show()
 
+
+# show muzzle flash, hit impact
 @rpc("call_local")
 func play_shoot_effect():
 	muzzle_flash.play("default")
