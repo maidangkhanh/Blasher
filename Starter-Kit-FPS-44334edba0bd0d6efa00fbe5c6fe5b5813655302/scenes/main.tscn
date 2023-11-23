@@ -1,10 +1,12 @@
-[gd_scene load_steps=10 format=3 uid="uid://dxvvlck8lej3f"]
+[gd_scene load_steps=12 format=3 uid="uid://dxvvlck8lej3f"]
 
 [ext_resource type="Script" path="res://scenes/main.gd" id="1_lohhv"]
 [ext_resource type="Environment" uid="uid://jvmpkdwaeaq" path="res://scenes/main-environment.tres" id="1_q8fpv"]
 [ext_resource type="Script" path="res://scripts/hud.gd" id="2_hgkro"]
 [ext_resource type="FontFile" uid="uid://biqtga8moh7ah" path="res://fonts/lilita_one_regular.ttf" id="3_ywv7x"]
+[ext_resource type="PackedScene" uid="uid://r7rt7pth4u7o" path="res://objects/wall_low.tscn" id="6_lejwk"]
 [ext_resource type="PackedScene" uid="uid://bvx5cvigosg0s" path="res://objects/platform_large_grass.tscn" id="7_wggef"]
+[ext_resource type="PackedScene" uid="uid://c71evdjblk5wp" path="res://objects/wall_high.tscn" id="7_yyawa"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_hjpmg"]
 font = ExtResource("3_ywv7x")
@@ -181,6 +183,30 @@ shadow_opacity = 0.75
 
 [node name="platform-large-grass" parent="Level" instance=ExtResource("7_wggef")]
 transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 0, -0.5, 0)
+
+[node name="wall-low" parent="Level" instance=ExtResource("6_lejwk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 0, 0)
+
+[node name="wall-low5" parent="Level" instance=ExtResource("6_lejwk")]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -5, 0, -4)
+
+[node name="wall-low6" parent="Level" instance=ExtResource("6_lejwk")]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 5, 0, 4)
+
+[node name="wall-low2" parent="Level" instance=ExtResource("6_lejwk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16, 0, 0)
+
+[node name="wall-low3" parent="Level" instance=ExtResource("6_lejwk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 0)
+
+[node name="wall-low4" parent="Level" instance=ExtResource("6_lejwk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 0)
+
+[node name="wall-high" parent="Level" instance=ExtResource("7_yyawa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8)
+
+[node name="wall-high2" parent="Level" instance=ExtResource("7_yyawa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
 
 [node name="Decoration" type="Node" parent="."]
 

@@ -112,11 +112,6 @@ func _physics_process(delta):
 	
 	previously_floored = is_on_floor()
 	
-	# Falling/respawning
-	
-	# TODO: fix handle death
-	# if position.y < -10:
-	# 	reset_scence()
 
 # Mouse movement
 func _input(event):
@@ -224,31 +219,7 @@ func action_shoot():
 		# Shoot the weapon, amount based on shot count
 		weapon.shoot()
 		ammo_update()
-		for n in weapon.shot_count:
-
-			raycast.target_position.x = randf_range(-weapon.spread, weapon.spread)
-			raycast.target_position.y = randf_range(-weapon.spread, weapon.spread)
-
-			raycast.force_raycast_update()
-
-			if !raycast.is_colliding(): continue # Don't create impact when raycast didn't hit
-
-			var collider = raycast.get_collider()
-
-			# Hitting an enemy			
-			if collider.has_method("damage"):
-				collider.damage.rpc(weapon.damage)
-
-			# Creating an impact animation			
-			var impact = preload("res://objects/impact.tscn")
-			var impact_instance = impact.instantiate()
-
-			impact_instance.play("shot")
-
-			get_tree().root.add_child(impact_instance)
-
-			impact_instance.position = raycast.get_collision_point() + (raycast.get_collision_normal() / 10)
-			impact_instance.look_at(camera.global_transform.origin, Vector3.UP, true) 
+#	
 
 # Toggle between available weapons (listed in 'weapons')
 func action_weapon_toggle():

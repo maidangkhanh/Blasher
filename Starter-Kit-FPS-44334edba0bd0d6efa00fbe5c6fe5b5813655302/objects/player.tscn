@@ -92,7 +92,8 @@ transform = Transform3D(0.3, -2.62268e-08, 0, 2.62268e-08, 0.3, 0, 0, 0, -0.3, 0
 visible = false
 
 [node name="MuzzleFlash" type="AnimatedSprite3D" parent="Head/Camera"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.50461, -0.258171, -0.699283)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.505, -0.258, -0.7)
+visible = false
 sprite_frames = ExtResource("4_m6ukc")
 frame = 2
 frame_progress = 1.0

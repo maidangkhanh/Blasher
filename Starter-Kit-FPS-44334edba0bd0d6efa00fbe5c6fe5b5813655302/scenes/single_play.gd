@@ -1,23 +1,19 @@
 extends Node3D
 
-const PLAYER = preload("res://objects/player.tscn")
-const PORT = 9999
-var enet_peer = ENetMultiplayerPeer.new()
+@onready var hud = $CanvasLayer/HUD
+@onready var player = $Player
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass
+	connect_signals(player)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
 
-func add_player(peer_id):
-	var player = PLAYER.instantiate()
-	player.name = str(peer_id)
-	add_child(player)
-
-func remove_player(peer_id):
-	var player =  get_node_or_null(str(peer_id))
-	if player:
-		player.queue_free()
+func connect_signals(node:Player):
+		node.ammo_updated.connect(hud._on_player_ammo_updated)
+		node.reloading_start.connect(hud._on_player_reloading_start)
+		node.reloading_finish.connect(hud._on_player_reloading_finish)
+		node.reload_interupt.connect(hud._on_player_reload_interupt)
+		node.health_updated.connect(hud._on_player_health_updated)
