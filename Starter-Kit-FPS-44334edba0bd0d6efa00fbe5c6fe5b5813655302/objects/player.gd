@@ -88,8 +88,9 @@ func _physics_process(delta):
 	move_and_slide()
 	
 	# Reset weapon container position after recoil
-		
+
 	container.position = lerp(container.position, container_offset - (applied_velocity / 30), delta * 20)
+	camera.rotation.x = clamp(camera.rotation.x, -PI/2, PI/2)
 	
 	# Movement sound
 	
@@ -117,7 +118,7 @@ func _physics_process(delta):
 func _input(event):
 	if not is_multiplayer_authority(): return
 	
-	if event is InputEventMouseMotion and mouse_captured:
+	if event is InputEventMouseMotion:
 		rotate_y(-event.relative.x * .005)
 		camera.rotate_x(-event.relative.y * .005)
 		camera.rotation.x = clamp(camera.rotation.x, -PI/2, PI/2)
@@ -149,7 +150,6 @@ func handle_controls(_delta):
 	action_shoot()
 
 	# Jumping
-	
 	if Input.is_action_just_pressed("jump"):
 		
 		if jump_single or jump_double:
@@ -203,7 +203,7 @@ func action_shoot():
 		# Recoil
 		container.position.z += 0.25 # Knockback of weapon visual
 		camera.rotation.x += randf_range(0.015, 0.03) # Knockback of camera vertically
-		camera.rotation.y += randf_range(-0.005, 0.005) # Knockback of camera horizontally
+		rotate_y(randf_range(-0.0075, 0.0075)) # Knockback horizontally
 		
 		# Set muzzle flash position, play animation
 		play_shoot_effect.rpc()
