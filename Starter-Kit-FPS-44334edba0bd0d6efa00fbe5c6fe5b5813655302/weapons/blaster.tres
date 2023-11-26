@@ -18,5 +18,6 @@ shot_count = 3
 knockback = 40
 reload_time = 2.0
 max_ammo = 30
+recoil_rate = 0.5
 sound_shoot = "sounds/blaster.ogg"
 crosshair = ExtResource("1_2onsr")

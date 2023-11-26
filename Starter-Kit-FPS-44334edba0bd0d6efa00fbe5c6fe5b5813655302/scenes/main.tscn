@@ -1,9 +1,10 @@
-[gd_scene load_steps=12 format=3 uid="uid://dxvvlck8lej3f"]
+[gd_scene load_steps=13 format=3 uid="uid://dxvvlck8lej3f"]
 
 [ext_resource type="Script" path="res://scenes/main.gd" id="1_lohhv"]
 [ext_resource type="Environment" uid="uid://jvmpkdwaeaq" path="res://scenes/main-environment.tres" id="1_q8fpv"]
 [ext_resource type="Script" path="res://scripts/hud.gd" id="2_hgkro"]
 [ext_resource type="FontFile" uid="uid://biqtga8moh7ah" path="res://fonts/lilita_one_regular.ttf" id="3_ywv7x"]
+[ext_resource type="Script" path="res://scenes/scoreboard.gd" id="4_exfh0"]
 [ext_resource type="PackedScene" uid="uid://r7rt7pth4u7o" path="res://objects/wall_low.tscn" id="6_lejwk"]
 [ext_resource type="PackedScene" uid="uid://bvx5cvigosg0s" path="res://objects/platform_large_grass.tscn" id="7_wggef"]
 [ext_resource type="PackedScene" uid="uid://c71evdjblk5wp" path="res://objects/wall_high.tscn" id="7_yyawa"]
@@ -168,6 +169,67 @@ label_settings = SubResource("LabelSettings_hwgvc")
 
 [node name="ReloadTimer" type="Timer" parent="CanvasLayer/HUD/Gun HUD"]
 one_shot = true
+
+[node name="Scoreboard" type="Control" parent="CanvasLayer"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("4_exfh0")
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/Scoreboard"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Scoreboard/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Scoreboard/PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/Scoreboard/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Scoreboard"
+
+[node name="ScoreLabel" type="HBoxContainer" parent="CanvasLayer/Scoreboard/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="LabelName" type="Label" parent="CanvasLayer/Scoreboard/PanelContainer/MarginContainer/VBoxContainer/ScoreLabel"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Name"
+
+[node name="LabelScore" type="Label" parent="CanvasLayer/Scoreboard/PanelContainer/MarginContainer/VBoxContainer/ScoreLabel"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Score"
+
+[node name="LabelKill" type="Label" parent="CanvasLayer/Scoreboard/PanelContainer/MarginContainer/VBoxContainer/ScoreLabel"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Kill"
+
+[node name="LabelDeath" type="Label" parent="CanvasLayer/Scoreboard/PanelContainer/MarginContainer/VBoxContainer/ScoreLabel"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Death"
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource("1_q8fpv")
