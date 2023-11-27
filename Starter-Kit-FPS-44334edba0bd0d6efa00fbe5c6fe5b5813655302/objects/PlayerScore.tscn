@@ -9,7 +9,7 @@ anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="Container" type="HBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -17,26 +17,26 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="LabelName" type="Label" parent="HBoxContainer"]
+[node name="LabelName" type="Label" parent="Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
-text = "Name"
+text = "name"
 
-[node name="LabelScore" type="Label" parent="HBoxContainer"]
+[node name="LabelScore" type="Label" parent="Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
-text = "Score"
+text = "0"
 
-[node name="LabelKill" type="Label" parent="HBoxContainer"]
+[node name="LabelKill" type="Label" parent="Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
-text = "Kill"
+text = "0"
 
-[node name="LabelDeath" type="Label" parent="HBoxContainer"]
+[node name="LabelDeath" type="Label" parent="Container"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
-text = "Death"
+text = "0"
