@@ -17,7 +17,7 @@ class_name Weapon
 @export_range(1, 5) var reload_time:float = 2 # Time to Reload
 @export_range(1, 200) var max_ammo:int = 30 # Maximum ammunitions
 @export_range(0, 1) var recoil_rate:float = 0.5 # Recoil rate, higher mean more recoil
-var current_ammo: int = 30
+var current_ammo: int
 
 @export_subgroup("Sounds")
 @export var sound_shoot: String # Sound path
@@ -25,7 +25,7 @@ var current_ammo: int = 30
 @export_subgroup("Crosshair")
 @export var crosshair: Texture2D # Image of crosshair on-screen
 
-func _innit():
+func setup():
 	current_ammo = max_ammo
 
 func shoot():

@@ -53,6 +53,8 @@ signal reload_interupt
 
 func _enter_tree():
 	set_multiplayer_authority(str(name).to_int())
+	for w in weapons:
+		w.setup()
 
 
 # Functions
