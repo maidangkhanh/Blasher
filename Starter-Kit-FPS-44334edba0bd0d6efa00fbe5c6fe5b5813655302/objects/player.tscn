@@ -35,7 +35,7 @@ properties/3/watch = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 collision_layer = 2
 script = ExtResource("1_ffboj")
-weapons = Array[Resource("res://scripts/weapon.gd")]([ExtResource("2_6epbw"), ExtResource("3_kr4p8"), ExtResource("4_tkc51"), ExtResource("5_awd03")])
+weapons = Array[Resource("res://scripts/weapon.gd")]([ExtResource("4_tkc51"), ExtResource("5_awd03"), ExtResource("2_6epbw"), ExtResource("3_kr4p8")])
 
 [node name="Mesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)

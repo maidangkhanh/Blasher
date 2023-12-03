@@ -32,23 +32,23 @@ _subresources={
 "materials": {
 "_defaultMat": {
 "use_external/enabled": true,
-"use_external/path": "res://models/Textures/_defaultMat.tres"
+"use_external/path": "res://models/Textures/sniper/_defaultMat.tres"
 },
 "dark": {
 "use_external/enabled": true,
-"use_external/path": "res://models/Textures/dark.tres"
+"use_external/path": "res://models/Textures/sniper/dark.tres"
 },
 "darkMetal": {
 "use_external/enabled": true,
-"use_external/path": "res://models/Textures/darkMetal.tres"
+"use_external/path": "res://models/Textures/sniper/darkMetal.tres"
 },
 "metal": {
 "use_external/enabled": true,
-"use_external/path": "res://models/Textures/metal.tres"
+"use_external/path": "res://models/Textures/sniper/metal.tres"
 },
 "yellow": {
 "use_external/enabled": true,
-"use_external/path": "res://models/Textures/yellow.tres"
+"use_external/path": "res://models/Textures/sniper/yellow.tres"
 }
 }
 }

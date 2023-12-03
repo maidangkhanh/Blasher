@@ -32,23 +32,23 @@ _subresources={
 "materials": {
 "_defaultMat": {
 "use_external/enabled": true,
-"use_external/path": "res://models/Textures/_defaultMat.tres"
+"use_external/path": "res://models/Textures/submachine/_defaultMat.tres"
 },
 "dark": {
 "use_external/enabled": true,
-"use_external/path": "res://models/Textures/dark.tres"
+"use_external/path": "res://models/Textures/submachine/dark.tres"
 },
 "darkMetal": {
 "use_external/enabled": true,
-"use_external/path": "res://models/Textures/darkMetal.tres"
+"use_external/path": "res://models/Textures/submachine/darkMetal.tres"
 },
 "metal": {
 "use_external/enabled": true,
-"use_external/path": "res://models/Textures/metal.tres"
+"use_external/path": "res://models/Textures/submachine/metal.tres"
 },
 "purple": {
 "use_external/enabled": true,
-"use_external/path": "res://models/Textures/purple.tres"
+"use_external/path": "res://models/Textures/submachine/purple.tres"
 }
 }
 }
