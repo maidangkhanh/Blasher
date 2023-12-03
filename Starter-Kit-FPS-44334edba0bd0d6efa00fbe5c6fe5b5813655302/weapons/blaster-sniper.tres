@@ -7,9 +7,9 @@
 [resource]
 script = ExtResource("3_8fg14")
 model = ExtResource("2_i88jx")
-position = Vector3(0, 0, 0)
+position = Vector3(0, 0.05, 0)
 rotation = Vector3(0, 180, 0)
-muzzle_position = Vector3(0.1, -0.4, 1.5)
+muzzle_position = Vector3(0.1, -0.3, 2.5)
 cooldown = 0.3
 max_distance = 20
 damage = 50.0
