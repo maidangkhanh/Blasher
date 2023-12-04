@@ -4,11 +4,11 @@ extends Node
 @onready var address_entry = $CanvasLayer/MainMenu/MarginContainer/VBoxContainer/AddressEntry
 @onready var players = $Players
 @onready var hud = $CanvasLayer/HUD
+@onready var scoreboard = $CanvasLayer/Scoreboard
 
 const Player = preload("res://objects/player.tscn")
 const PORT = 9999
 var enet_peer = ENetMultiplayerPeer.new()
-
 
 func _on_host_button_pressed():
 	main_menu.hide()
@@ -40,6 +40,8 @@ func add_player(peer_id):
 	for n in players.get_children():
 		if not n.is_multiplayer_authority():
 			n.show_weapon_visual()
+		if n is Player:
+			scoreboard.add_player(n)
 
 func remove_player(peer_id):
 	var player = get_node_or_null(str(peer_id))

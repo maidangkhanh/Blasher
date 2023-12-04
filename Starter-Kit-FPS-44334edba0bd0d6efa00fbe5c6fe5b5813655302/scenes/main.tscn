@@ -213,12 +213,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "Name"
 
-[node name="LabelScore" type="Label" parent="CanvasLayer/Scoreboard/PanelContainer/MarginContainer/ScoreTable/ScoreLabel"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 1
-text = "Score"
-
 [node name="LabelKill" type="Label" parent="CanvasLayer/Scoreboard/PanelContainer/MarginContainer/ScoreTable/ScoreLabel"]
 layout_mode = 2
 size_flags_horizontal = 3
