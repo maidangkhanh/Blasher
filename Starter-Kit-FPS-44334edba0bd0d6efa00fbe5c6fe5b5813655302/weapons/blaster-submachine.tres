@@ -7,7 +7,7 @@
 [resource]
 script = ExtResource("1_kutgc")
 model = ExtResource("1_wvlrc")
-position = Vector3(0, 0, 0)
+position = Vector3(0, 0.2, 0)
 rotation = Vector3(0, 180, 0)
 muzzle_position = Vector3(0.1, -0.4, 1.5)
 cooldown = 0.1
