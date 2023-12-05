@@ -13,7 +13,12 @@ func _input(event):
 
 func add_player(player:Player):
 	var score_instance = player_score.instantiate()
+	score_instance.set_name(player.name)
 	score_instance.set_player_name(player)
 	score_instance.set_player_kill(player)
 	score_instance.set_player_death(player)
 	score_talble.add_child(score_instance)
+
+func remove_player(player_name:String):
+	var scoreboard_item = score_talble.get_node(player_name)
+	scoreboard_item.queue_free()

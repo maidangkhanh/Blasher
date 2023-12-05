@@ -27,7 +27,12 @@ func _on_join_button_pressed():
 	main_menu.hide()
 	hud.show()
 	
-	enet_peer.create_client("localhost", PORT)
+	var address = address_entry.get_text()
+	
+	if address == "":
+		address = "localhost"
+	
+	enet_peer.create_client(address, PORT)
 	multiplayer.multiplayer_peer = enet_peer
 
 func add_player(peer_id):
@@ -36,17 +41,18 @@ func add_player(peer_id):
 	players.add_child(player)
 	if player.is_multiplayer_authority():
 		connect_signals(player)
+		scoreboard.add_player(player)
 	
 	for n in players.get_children():
-		if not n.is_multiplayer_authority():
+		if not n.is_multiplayer_authority():	
 			n.show_weapon_visual()
-		if n is Player:
 			scoreboard.add_player(n)
 
 func remove_player(peer_id):
-	var player = get_node_or_null(str(peer_id))
+	var player = players.get_node_or_null(str(peer_id))
 	if player:
 		player.queue_free()
+		scoreboard.remove_player(player.name)
 
 func upnp_setup():
 	var upnp = UPNP.new()
@@ -66,13 +72,15 @@ func upnp_setup():
 
 
 func _on_multiplayer_spawner_spawned(node):
-	for n in players.get_children():
-		if not n.is_multiplayer_authority():
-			n.change_weapon_visual.rpc(n.weapon_index)
-			n.show_weapon_visual()
-			
 	if node.is_multiplayer_authority():
 		connect_signals(node)
+		
+		for n in players.get_children():
+			scoreboard.add_player(n)
+			if not n.is_multiplayer_authority():
+				n.change_weapon_visual.rpc(n.weapon_index)
+				n.show_weapon_visual()
+
 
 
 func connect_signals(node:Player):
