@@ -29,6 +29,9 @@ var previously_floored := false
 var jump_single := true
 var jump_double := true
 
+var kill_count:int = 0
+var death_count:int =0
+
 var container_offset = Vector3(1.2, -1.1, -2.75)
 
 var tween:Tween
@@ -38,6 +41,7 @@ signal ammo_updated(ammo_description)
 signal reloading_start(reload_time)
 signal reloading_finish
 signal reload_interupt
+signal died()
 
 @onready var camera = $Head/Camera
 @onready var raycast = $Head/Camera/RayCast
@@ -104,7 +108,7 @@ func _physics_process(delta):
 	
 	# Landing after jump or falling
 	
-	# camera.position.y = lerp(camera.position.y, 0.0, delta * 5)
+	camera.position.y = lerp(camera.position.y, 0.0, delta * 5)
 	
 	if is_on_floor() and gravity > 1 and !previously_floored: # Landed
 		Audio.play("sounds/land.ogg")
@@ -287,10 +291,15 @@ func damage(amount):
 	
 	# Respawn
 	if health <= 0:
-		health = 100
-		health_updated.emit(health)
-		position = Vector3.ZERO # Reset when out of health
+		die()
 
+
+func die():
+	death_count+=1
+	health = 100
+	health_updated.emit(health)
+	position = Vector3.ZERO # Reset when out of health
+	died.emit()
 
 # HUD ammo update
 func ammo_update():	

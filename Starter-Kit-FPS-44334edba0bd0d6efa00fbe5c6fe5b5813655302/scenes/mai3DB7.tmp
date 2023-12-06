@@ -1,0 +1,277 @@
+[gd_scene load_steps=13 format=3 uid="uid://dxvvlck8lej3f"]
+
+[ext_resource type="Script" path="res://scenes/main.gd" id="1_lohhv"]
+[ext_resource type="Environment" uid="uid://jvmpkdwaeaq" path="res://scenes/main-environment.tres" id="1_q8fpv"]
+[ext_resource type="Script" path="res://scripts/hud.gd" id="2_hgkro"]
+[ext_resource type="FontFile" uid="uid://biqtga8moh7ah" path="res://fonts/lilita_one_regular.ttf" id="3_ywv7x"]
+[ext_resource type="Script" path="res://scenes/scoreboard.gd" id="4_exfh0"]
+[ext_resource type="PackedScene" uid="uid://r7rt7pth4u7o" path="res://objects/wall_low.tscn" id="6_lejwk"]
+[ext_resource type="PackedScene" uid="uid://bvx5cvigosg0s" path="res://objects/platform_large_grass.tscn" id="7_wggef"]
+[ext_resource type="PackedScene" uid="uid://c71evdjblk5wp" path="res://objects/wall_high.tscn" id="7_yyawa"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_hjpmg"]
+font = ExtResource("3_ywv7x")
+font_size = 36
+outline_size = 12
+outline_color = Color(0, 0, 0, 0.470588)
+
+[sub_resource type="LabelSettings" id="LabelSettings_hwgvc"]
+font = ExtResource("3_ywv7x")
+font_size = 36
+outline_size = 12
+outline_color = Color(0, 0, 0, 0.470588)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3h1bp"]
+bg_color = Color(0, 0, 0, 0.705882)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gbcyq"]
+bg_color = Color(0, 1, 0, 1)
+
+[node name="Main" type="Node3D"]
+script = ExtResource("1_lohhv")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="MainMenu" type="PanelContainer" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 427.0
+offset_top = 259.0
+offset_right = -427.0
+offset_bottom = -259.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MainMenu"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Label" type="Label" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Main
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HostButton" type="Button" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Host"
+
+[node name="JoinButton" type="Button" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Join"
+
+[node name="AddressEntry" type="LineEdit" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Adress"
+alignment = 1
+
+[node name="HUD" type="Control" parent="CanvasLayer"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("2_hgkro")
+
+[node name="Health" type="Label" parent="CanvasLayer/HUD"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 5.0
+offset_top = 630.0
+offset_right = 95.0
+offset_bottom = 675.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+text = "100%"
+label_settings = SubResource("LabelSettings_hjpmg")
+vertical_alignment = 2
+
+[node name="Crosshair" type="TextureRect" parent="CanvasLayer/HUD"]
+layout_mode = 0
+offset_left = 640.0
+offset_top = 360.0
+offset_right = 640.0
+offset_bottom = 360.0
+scale = Vector2(0.35, 0.35)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Gun HUD" type="Control" parent="CanvasLayer/HUD"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ReloadingText" type="Label" parent="CanvasLayer/HUD/Gun HUD"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 1088.0
+offset_top = 530.0
+offset_right = 1243.0
+offset_bottom = 575.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Reloading"
+label_settings = SubResource("LabelSettings_hwgvc")
+
+[node name="ReloadingBar" type="ProgressBar" parent="CanvasLayer/HUD/Gun HUD"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 1088.0
+offset_top = 580.0
+offset_right = 1243.0
+offset_bottom = 625.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_3h1bp")
+theme_override_styles/fill = SubResource("StyleBoxFlat_gbcyq")
+show_percentage = false
+
+[node name="Ammo" type="Label" parent="CanvasLayer/HUD/Gun HUD"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 1106.0
+offset_top = 630.0
+offset_right = 1225.0
+offset_bottom = 675.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "30 / 30"
+label_settings = SubResource("LabelSettings_hwgvc")
+
+[node name="ReloadTimer" type="Timer" parent="CanvasLayer/HUD/Gun HUD"]
+one_shot = true
+
+[node name="Scoreboard" type="Control" parent="CanvasLayer"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("4_exfh0")
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/Scoreboard"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Scoreboard/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="ScoreTable" type="VBoxContainer" parent="CanvasLayer/Scoreboard/PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/Scoreboard/PanelContainer/MarginContainer/ScoreTable"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Scoreboard"
+
+[node name="ScoreLabel" type="HBoxContainer" parent="CanvasLayer/Scoreboard/PanelContainer/MarginContainer/ScoreTable"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="LabelName" type="Label" parent="CanvasLayer/Scoreboard/PanelContainer/MarginContainer/ScoreTable/ScoreLabel"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Name"
+
+[node name="LabelKill" type="Label" parent="CanvasLayer/Scoreboard/PanelContainer/MarginContainer/ScoreTable/ScoreLabel"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Kill"
+
+[node name="LabelDeath" type="Label" parent="CanvasLayer/Scoreboard/PanelContainer/MarginContainer/ScoreTable/ScoreLabel"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Death"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("1_q8fpv")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.422618, -0.694272, 0.582564, 0, 0.642788, 0.766044, -0.906308, 0.323744, -0.271654, 0, 0, 0)
+shadow_enabled = true
+shadow_opacity = 0.75
+
+[node name="Enemies" type="Node" parent="."]
+
+[node name="Level" type="Node" parent="."]
+
+[node name="platform-large-grass" parent="Level" instance=ExtResource("7_wggef")]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 0, -0.5, 0)
+
+[node name="wall-low" parent="Level" instance=ExtResource("6_lejwk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 0, 0)
+
+[node name="wall-low5" parent="Level" instance=ExtResource("6_lejwk")]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -5, 0, -4)
+
+[node name="wall-low6" parent="Level" instance=ExtResource("6_lejwk")]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 5, 0, 4)
+
+[node name="wall-low2" parent="Level" instance=ExtResource("6_lejwk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16, 0, 0)
+
+[node name="wall-low3" parent="Level" instance=ExtResource("6_lejwk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 0)
+
+[node name="wall-low4" parent="Level" instance=ExtResource("6_lejwk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 0)
+
+[node name="wall-high" parent="Level" instance=ExtResource("7_yyawa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8)
+
+[node name="wall-high2" parent="Level" instance=ExtResource("7_yyawa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="Decoration" type="Node" parent="."]
+
+[node name="Players" type="Node" parent="."]
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://objects/player.tscn")
+spawn_path = NodePath("../Players")
+
+[connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
+[connection signal="spawned" from="MultiplayerSpawner" to="." method="_on_multiplayer_spawner_spawned"]
