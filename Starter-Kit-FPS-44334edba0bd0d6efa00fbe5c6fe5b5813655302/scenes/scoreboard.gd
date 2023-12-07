@@ -17,6 +17,7 @@ func add_player(player:Player):
 	score_instance.set_player_name(player)
 	score_instance.set_player_kill(player)
 	score_instance.set_player_death(player)
+	score_instance.connect_signals(player)
 	score_talble.add_child(score_instance)
 
 func remove_player(player_name:String):

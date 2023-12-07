@@ -289,20 +289,15 @@ func change_weapon():
 func damage(amount):
 	health -= amount
 	health_updated.emit(health) # Update health on HUD
-	
-	# Respawn
-	if health <= 0:
-		die()
 
-
+@rpc("any_peer","reliable")
 func die():
 	death_count+=1
 	died.emit(death_count)
-	self.hide()
-	respawn()
+	respawn.rpc()
 
+@rpc("any_peer","reliable")
 func respawn():
-	await get_tree().create_timer(3.0).timeout
 	health = 100
 	health_updated.emit(health)
 	position = Vector3.ZERO # Reset when out of health
@@ -373,12 +368,13 @@ func play_shoot_effect():
 		
 		var collider = raycast.get_collider()
 		
-		# Hitting an enemy			
+		# Hitting an enemy
 		if collider.has_method("damage"):
 			collider.damage.rpc(weapons[weapon_index].damage)
 			if collider.is_death():
 				kill_count+=1
-				
+				killed.emit(kill_count)
+				collider.die.rpc()
 		
 		# Creating an impact animation			
 		var impact = preload("res://objects/impact.tscn")

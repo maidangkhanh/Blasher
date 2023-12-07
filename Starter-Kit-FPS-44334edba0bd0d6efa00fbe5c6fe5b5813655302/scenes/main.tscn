@@ -233,12 +233,10 @@ transform = Transform3D(-0.422618, -0.694272, 0.582564, 0, 0.642788, 0.766044, -
 shadow_enabled = true
 shadow_opacity = 0.75
 
-[node name="Enemies" type="Node" parent="."]
-
 [node name="Level" type="Node" parent="."]
 
 [node name="platform-large-grass" parent="Level" instance=ExtResource("7_wggef")]
-transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 0, -0.5, 0)
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, -0.279741, -0.499999, 0.207004)
 
 [node name="wall-low" parent="Level" instance=ExtResource("6_lejwk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 0, 0)
@@ -263,8 +261,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8)
 
 [node name="wall-high2" parent="Level" instance=ExtResource("7_yyawa")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
-
-[node name="Decoration" type="Node" parent="."]
 
 [node name="Players" type="Node" parent="."]
 
