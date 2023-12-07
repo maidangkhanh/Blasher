@@ -29,8 +29,8 @@ var previously_floored := false
 var jump_single := true
 var jump_double := true
 
-var kill_count:int = 0
-var death_count:int =0
+var kill_count = 0
+var death_count = 0
 
 var container_offset = Vector3(1.2, -1.1, -2.75)
 
@@ -41,7 +41,8 @@ signal ammo_updated(ammo_description)
 signal reloading_start(reload_time)
 signal reloading_finish
 signal reload_interupt
-signal died()
+signal died(death_count)
+signal killed(kill_count)
 
 @onready var camera = $Head/Camera
 @onready var raycast = $Head/Camera/RayCast
@@ -296,10 +297,16 @@ func damage(amount):
 
 func die():
 	death_count+=1
+	died.emit(death_count)
+	self.hide()
+	respawn()
+
+func respawn():
+	await get_tree().create_timer(3.0).timeout
 	health = 100
 	health_updated.emit(health)
 	position = Vector3.ZERO # Reset when out of health
-	died.emit()
+	self.show()
 
 # HUD ammo update
 func ammo_update():	
@@ -369,6 +376,9 @@ func play_shoot_effect():
 		# Hitting an enemy			
 		if collider.has_method("damage"):
 			collider.damage.rpc(weapons[weapon_index].damage)
+			if collider.is_death():
+				kill_count+=1
+				
 		
 		# Creating an impact animation			
 		var impact = preload("res://objects/impact.tscn")
@@ -380,3 +390,7 @@ func play_shoot_effect():
 		
 		impact_instance.position = raycast.get_collision_point() + (raycast.get_collision_normal() / 10)
 		impact_instance.look_at(camera.global_transform.origin, Vector3.UP, true) 
+
+
+func is_death()->bool:
+	return health <= 0

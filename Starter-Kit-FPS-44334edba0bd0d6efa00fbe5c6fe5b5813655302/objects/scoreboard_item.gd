@@ -10,9 +10,11 @@ func set_player_name(player:Player):
 	name_label.set_text(player.name)
 	
 func set_player_kill(player:Player):
-	#kill_label.set_text(player.score.kill_count)
-	return
+	kill_label = $LabelKill
+	kill_label.text = str(player.kill_count)
+
 	
 func set_player_death(player:Player):
-	#death_label.set_text(player.score.death_count)
-	return
+	death_label = $LabelDeath
+	death_label.text = str(player.death_count)
+	

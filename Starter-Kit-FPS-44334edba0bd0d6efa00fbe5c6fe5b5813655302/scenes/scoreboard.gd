@@ -22,3 +22,9 @@ func add_player(player:Player):
 func remove_player(player_name:String):
 	var scoreboard_item = score_talble.get_node(player_name)
 	scoreboard_item.queue_free()
+
+func update_player(player:Player):
+	var item = get_node(NodePath(player.name))
+	item.set_player_kill(player)
+	item.set_player_death(player)
+	
