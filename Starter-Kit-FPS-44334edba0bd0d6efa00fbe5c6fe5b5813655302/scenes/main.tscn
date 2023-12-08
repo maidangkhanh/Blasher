@@ -75,26 +75,26 @@ placeholder_text = "Adress"
 alignment = 1
 
 [node name="HUD" type="Control" parent="CanvasLayer"]
-visible = false
 layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource("2_hgkro")
 
 [node name="Health" type="Label" parent="CanvasLayer/HUD"]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 5.0
-offset_top = 630.0
-offset_right = 95.0
-offset_bottom = 675.0
-grow_horizontal = 2
-grow_vertical = 2
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 50.0
+offset_top = -75.0
+offset_right = 140.0
+offset_bottom = -30.0
+grow_vertical = 0
 size_flags_horizontal = 0
 size_flags_vertical = 8
 text = "100%"
@@ -102,68 +102,77 @@ label_settings = SubResource("LabelSettings_hjpmg")
 vertical_alignment = 2
 
 [node name="Crosshair" type="TextureRect" parent="CanvasLayer/HUD"]
-layout_mode = 0
-offset_left = 640.0
-offset_top = 360.0
-offset_right = 640.0
-offset_bottom = 360.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
 scale = Vector2(0.35, 0.35)
+pivot_offset = Vector2(64, 64)
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
 [node name="Gun HUD" type="Control" parent="CanvasLayer/HUD"]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="ReloadingText" type="Label" parent="CanvasLayer/HUD/Gun HUD"]
-visible = false
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 1088.0
-offset_top = 530.0
-offset_right = 1243.0
-offset_bottom = 575.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="ReloadingText" type="Label" parent="CanvasLayer/HUD/Gun HUD"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -185.0
+offset_top = -155.0
+offset_right = -30.0
+offset_bottom = -110.0
+grow_horizontal = 0
+grow_vertical = 0
 text = "Reloading"
 label_settings = SubResource("LabelSettings_hwgvc")
 
 [node name="ReloadingBar" type="ProgressBar" parent="CanvasLayer/HUD/Gun HUD"]
-visible = false
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 1088.0
-offset_top = 580.0
-offset_right = 1243.0
-offset_bottom = 625.0
-grow_horizontal = 2
-grow_vertical = 2
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -185.0
+offset_top = -110.0
+offset_right = -30.0
+offset_bottom = -65.0
+grow_horizontal = 0
+grow_vertical = 0
 theme_override_styles/background = SubResource("StyleBoxFlat_3h1bp")
 theme_override_styles/fill = SubResource("StyleBoxFlat_gbcyq")
 show_percentage = false
 
 [node name="Ammo" type="Label" parent="CanvasLayer/HUD/Gun HUD"]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 1106.0
-offset_top = 630.0
-offset_right = 1225.0
-offset_bottom = 675.0
-grow_horizontal = 2
-grow_vertical = 2
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -169.0
+offset_top = -65.0
+offset_right = -50.0
+offset_bottom = -20.0
+grow_horizontal = 0
+grow_vertical = 0
 text = "30 / 30"
 label_settings = SubResource("LabelSettings_hwgvc")
 

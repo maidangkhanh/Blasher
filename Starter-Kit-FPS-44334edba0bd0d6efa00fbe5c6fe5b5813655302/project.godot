@@ -14,9 +14,9 @@ config/name="Starter Kit FPS"
 config/tags=PackedStringArray("starterkit")
 run/main_scene="res://scenes/main.tscn"
 config/features=PackedStringArray("4.1", "Forward Plus")
-boot_splash/bg_color=Color(0.92549, 0.92549, 0.960784, 1)
-boot_splash/image="res://splash-screen.png"
-config/icon="res://icon.png"
+boot_splash/bg_color=Color(0.194349, 0.194349, 0.194349, 0.352941)
+boot_splash/image="res://blaster_icon.png"
+config/icon="res://blaster_icon.png"
 
 [autoload]
 
