@@ -1,8 +1,9 @@
-[gd_scene load_steps=12 format=3 uid="uid://dl2ed4gkybggf"]
+[gd_scene load_steps=13 format=3 uid="uid://dl2ed4gkybggf"]
 
-[ext_resource type="Script" path="res://objects/player.gd" id="1_ffboj"]
+[ext_resource type="Script" uid="uid://csj4dvgdcustu" path="res://objects/player.gd" id="1_ffboj"]
 [ext_resource type="Resource" uid="uid://cu2gtxlcmbb34" path="res://weapons/blaster-repeater.tres" id="2_6epbw"]
 [ext_resource type="Texture2D" uid="uid://8ggihh27mlrr" path="res://sprites/blob_shadow.png" id="2_b0fo8"]
+[ext_resource type="Script" uid="uid://bbnqfvgpfo4ax" path="res://scripts/weapon.gd" id="2_i8sra"]
 [ext_resource type="Resource" uid="uid://c56y8pqoyk15f" path="res://weapons/blaster.tres" id="3_kr4p8"]
 [ext_resource type="SpriteFrames" uid="uid://c5tbdyl617bte" path="res://sprites/burst_animation.tres" id="4_m6ukc"]
 [ext_resource type="Resource" uid="uid://0gaufq00dk30" path="res://weapons/blaster-sniper.tres" id="4_tkc51"]
@@ -16,26 +17,22 @@
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_3ocir"]
 properties/0/path = NodePath(".:rotation")
 properties/0/spawn = true
-properties/0/sync = true
-properties/0/watch = false
+properties/0/replication_mode = 1
 properties/1/path = NodePath(".:position")
 properties/1/spawn = true
-properties/1/sync = true
-properties/1/watch = false
+properties/1/replication_mode = 1
 properties/2/path = NodePath("Head/Camera:rotation")
 properties/2/spawn = true
-properties/2/sync = true
-properties/2/watch = false
+properties/2/replication_mode = 1
 properties/3/path = NodePath(".:weapon_index")
 properties/3/spawn = true
-properties/3/sync = true
-properties/3/watch = false
+properties/3/replication_mode = 1
 
 [node name="Player" type="CharacterBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 collision_layer = 2
 script = ExtResource("1_ffboj")
-weapons = Array[Resource("res://scripts/weapon.gd")]([ExtResource("4_tkc51"), ExtResource("5_awd03"), ExtResource("2_6epbw"), ExtResource("3_kr4p8")])
+weapons = Array[ExtResource("2_i8sra")]([ExtResource("4_tkc51"), ExtResource("5_awd03"), ExtResource("2_6epbw"), ExtResource("3_kr4p8")])
 
 [node name="Mesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)

@@ -1,10 +1,10 @@
 [gd_scene load_steps=13 format=3 uid="uid://dxvvlck8lej3f"]
 
-[ext_resource type="Script" path="res://scenes/main.gd" id="1_lohhv"]
+[ext_resource type="Script" uid="uid://dw1yrvkaxnj44" path="res://scenes/main.gd" id="1_lohhv"]
 [ext_resource type="Environment" uid="uid://jvmpkdwaeaq" path="res://scenes/main-environment.tres" id="1_q8fpv"]
-[ext_resource type="Script" path="res://scripts/hud.gd" id="2_hgkro"]
+[ext_resource type="Script" uid="uid://rjmrqwr3pmsp" path="res://scripts/hud.gd" id="2_hgkro"]
 [ext_resource type="FontFile" uid="uid://biqtga8moh7ah" path="res://fonts/lilita_one_regular.ttf" id="3_ywv7x"]
-[ext_resource type="Script" path="res://scenes/scoreboard.gd" id="4_exfh0"]
+[ext_resource type="Script" uid="uid://bkmvgqqkkbrwk" path="res://scripts/scoreboard.gd" id="4_exfh0"]
 [ext_resource type="PackedScene" uid="uid://r7rt7pth4u7o" path="res://objects/wall_low.tscn" id="6_lejwk"]
 [ext_resource type="PackedScene" uid="uid://bvx5cvigosg0s" path="res://objects/platform_large_grass.tscn" id="7_wggef"]
 [ext_resource type="PackedScene" uid="uid://c71evdjblk5wp" path="res://objects/wall_high.tscn" id="7_yyawa"]
@@ -75,6 +75,7 @@ placeholder_text = "Adress"
 alignment = 1
 
 [node name="HUD" type="Control" parent="CanvasLayer"]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -128,6 +129,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="ReloadingText" type="Label" parent="CanvasLayer/HUD/Gun HUD"]
+visible = false
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -144,6 +146,7 @@ text = "Reloading"
 label_settings = SubResource("LabelSettings_hwgvc")
 
 [node name="ReloadingBar" type="ProgressBar" parent="CanvasLayer/HUD/Gun HUD"]
+visible = false
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -212,6 +215,11 @@ layout_mode = 2
 size_flags_horizontal = 4
 text = "Scoreboard"
 
+[node name="IPAddress" type="Label" parent="CanvasLayer/Scoreboard/PanelContainer/MarginContainer/ScoreTable"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "127.0.0.1"
+
 [node name="ScoreLabel" type="HBoxContainer" parent="CanvasLayer/Scoreboard/PanelContainer/MarginContainer/ScoreTable"]
 layout_mode = 2
 size_flags_vertical = 0
@@ -274,7 +282,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
 [node name="Players" type="Node" parent="."]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://objects/player.tscn")
+_spawnable_scenes = PackedStringArray("uid://dl2ed4gkybggf")
 spawn_path = NodePath("../Players")
 
 [connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]

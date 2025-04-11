@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://dxxutbrlychu6" path="res://sprites/crosshair-sniper.png" id="1_8vdal"]
 [ext_resource type="PackedScene" uid="uid://b7mg0uuyvx1bw" path="res://models/blaster-sniper.glb" id="2_i88jx"]
-[ext_resource type="Script" path="res://scripts/weapon.gd" id="3_8fg14"]
+[ext_resource type="Script" uid="uid://bbnqfvgpfo4ax" path="res://scripts/weapon.gd" id="3_8fg14"]
 
 [resource]
 script = ExtResource("3_8fg14")
@@ -11,12 +11,13 @@ position = Vector3(0, 0.2, 0)
 rotation = Vector3(0, 180, 0)
 muzzle_position = Vector3(0.1, -0.3, 2.5)
 cooldown = 0.3
-max_distance = 20
+max_distance = 100
 damage = 50.0
 spread = 0.1
 shot_count = 1
 reload_time = 2.2
 max_ammo = 12
 recoil_rate = 0.9
+accuracy_recovery_rate = 3.0
 sound_shoot = "sounds/blaster.ogg"
 crosshair = ExtResource("1_8vdal")

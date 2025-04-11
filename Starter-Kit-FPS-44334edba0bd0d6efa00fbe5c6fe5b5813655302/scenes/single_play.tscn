@@ -1,6 +1,6 @@
 [gd_scene load_steps=15 format=3 uid="uid://dfhk1ixhf7sm2"]
 
-[ext_resource type="Script" path="res://scenes/single_play.gd" id="1_ra4gc"]
+[ext_resource type="Script" uid="uid://bq34e25l8qquo" path="res://scenes/single_play.gd" id="1_ra4gc"]
 [ext_resource type="Environment" uid="uid://jvmpkdwaeaq" path="res://scenes/main-environment.tres" id="2_db7yb"]
 [ext_resource type="PackedScene" uid="uid://dl2ed4gkybggf" path="res://objects/player.tscn" id="3_5iqpt"]
 [ext_resource type="PackedScene" uid="uid://r7rt7pth4u7o" path="res://objects/wall_low.tscn" id="3_nfydl"]
@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://dpm3l05d7fu35" path="res://objects/platform.tscn" id="4_jfxdf"]
 [ext_resource type="PackedScene" uid="uid://c71evdjblk5wp" path="res://objects/wall_high.tscn" id="5_xhsyh"]
 [ext_resource type="PackedScene" uid="uid://bvx5cvigosg0s" path="res://objects/platform_large_grass.tscn" id="6_k5v7i"]
-[ext_resource type="Script" path="res://scripts/hud.gd" id="9_rdtmw"]
+[ext_resource type="Script" uid="uid://rjmrqwr3pmsp" path="res://scripts/hud.gd" id="9_rdtmw"]
 [ext_resource type="FontFile" uid="uid://biqtga8moh7ah" path="res://fonts/lilita_one_regular.ttf" id="10_wywv7"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_hsifr"]

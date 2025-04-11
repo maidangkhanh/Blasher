@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://c718dtiprfa5o"]
 
-[ext_resource type="Script" path="res://objects/scoreboard_item.gd" id="1_bbk1o"]
+[ext_resource type="Script" uid="uid://betvshprm50nv" path="res://objects/scoreboard_item.gd" id="1_bbk1o"]
 
 [node name="ScoreboardItem" type="HBoxContainer"]
 anchors_preset = 14

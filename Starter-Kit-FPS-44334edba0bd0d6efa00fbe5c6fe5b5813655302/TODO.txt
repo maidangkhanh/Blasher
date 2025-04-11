@@ -1,0 +1,8 @@
+Handle lobby
+Weapon accuracy loss
+Zoom, aim down sight?
+Projectile weapon
+
+
+Character Model?
+Headshot spot

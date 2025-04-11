@@ -9,15 +9,17 @@ class_name Weapon
 
 @export_subgroup("Properties")
 @export_range(0.1, 1) var cooldown: float = 0.1 # Firerate
-@export_range(1, 20) var max_distance: int = 50 # Fire distance
+@export_range(1, 100) var max_distance: int = 50 # Fire distance
 @export_range(0, 100) var damage: float = 25 # Damage per hit
 @export_range(0, 5) var spread: float = 0 # Spread of each shot
 @export_range(1, 5) var shot_count: int = 1 # Amount of shots
-#@export_range(0, 50) var knockback: int = 20 # Amount of knockback
 @export_range(1, 5) var reload_time:float = 2 # Time to Reload
 @export_range(1, 200) var max_ammo:int = 30 # Maximum ammunitions
 @export_range(0, 1) var recoil_rate:float = 0.5 # Recoil rate, higher mean more recoil
+@export_range(0, 5) var accuracy_recovery_rate:float = 0.5 # How fast weapon recover from recoil
 var current_ammo: int
+var accuracy_loss: float
+
 
 @export_subgroup("Sounds")
 @export var sound_shoot: String # Sound path
@@ -27,10 +29,14 @@ var current_ammo: int
 
 func setup():
 	current_ammo = max_ammo
+	accuracy_loss = spread
 
 func shoot():
 	current_ammo-=1
-	
+	clamp(current_ammo, 0, max_ammo)
+	accuracy_loss += recoil_rate
+	clampf(accuracy_loss, 0, 5)
+
 func reload():
 	current_ammo = max_ammo
 

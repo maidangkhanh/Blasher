@@ -4,6 +4,7 @@ class_name Player
 
 @export_subgroup("Properties")
 @export var movement_speed = 5
+@export var running_speed = 10
 @export var jump_strength = 7
 
 @export_subgroup("Weapons")
@@ -60,7 +61,7 @@ func _enter_tree():
 	set_multiplayer_authority(str(name).to_int())
 	for w in weapons:
 		w.setup()
-
+	weapon = weapons[0]
 
 # Functions
 func _ready():
@@ -73,7 +74,6 @@ func _ready():
 	crosshair = get_tree().root.get_node("Main/CanvasLayer/HUD/Crosshair")
 	initiate_change_weapon(weapon_index)
 	change_weapon_visual.rpc(weapon_index)
-
 
 func _physics_process(delta):
 	if not is_multiplayer_authority(): return
@@ -116,7 +116,10 @@ func _physics_process(delta):
 		#camera.position.y = -0.1
 	
 	previously_floored = is_on_floor()
-
+	
+	if(weapon != null):
+		# Accuracy recovery
+		weapon.accuracy_loss = lerp(weapon.accuracy_loss, 0.0, delta * weapon.accuracy_recovery_rate)
 
 # Mouse movement
 func _input(event):
@@ -129,6 +132,7 @@ func _input(event):
 
 
 func handle_controls(_delta):	
+	if not is_multiplayer_authority(): return
 	# Mouse capture
 	if Input.is_action_just_pressed("mouse_capture"):
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -146,12 +150,15 @@ func handle_controls(_delta):
 	
 	movement_velocity = input.normalized() * movement_speed
 	
+	if Input.is_action_pressed("run"):
+		movement_velocity = movement_velocity * running_speed/ movement_speed
+	
 	# Reloading
 	action_reload()
 	
 	# Shooting
 	action_shoot()
-
+	
 	# Jumping
 	if Input.is_action_just_pressed("jump"):
 		
@@ -168,23 +175,16 @@ func handle_controls(_delta):
 	# Weapon switching
 	action_weapon_toggle()
 
-
 # Handle gravity
 func handle_gravity(delta):
-	
 	gravity += 20 * delta
-	
 	if gravity > 0 and is_on_floor():
-		
 		jump_single = true
 		gravity = 0
 
-
 # Jumping
 func action_jump():
-	
 	gravity = -jump_strength
-	
 	jump_single = false;
 	jump_double = true;
 
@@ -209,20 +209,15 @@ func action_shoot():
 		camera.rotation.x += randf_range(0.03, 0.05) * weapon.recoil_rate # Knockback of camera vertically
 		rotate_y(randf_range(-0.0075, 0.0075) * weapon.recoil_rate)  # Knockback horizontally
 		
-		# Set muzzle flash position, play animation
-		play_shoot_effect.rpc()
+		# Handle shoot logic and animation
+		handle_shoot.rpc()
 		
 		muzzle.play("default")
-
 		muzzle.rotation_degrees.z = randf_range(-45, 45)
 		muzzle.scale = Vector3.ONE * randf_range(0.40, 0.75)
 		muzzle.position = container.position - weapon.muzzle_position
 
 		blaster_cooldown.start(weapon.cooldown)
-
-		# Shoot the weapon, amount based on shot count
-		weapon.shoot()
-		ammo_update()
 
 
 # Toggle between available weapons (listed in 'weapons')
@@ -304,7 +299,7 @@ func respawn():
 	self.show()
 
 # HUD ammo update
-func ammo_update():	
+func ammo_update():
 	ammo_updated.emit(str(weapon.current_ammo) + " / " + str(weapon.max_ammo))
 
 
@@ -349,18 +344,20 @@ func show_weapon_visual():
 
 # show muzzle flash, hit impact
 @rpc("call_local")
-func play_shoot_effect():
+func handle_shoot():
+	if not is_multiplayer_authority(): return
 	muzzle_flash.play("default")
 	
 	muzzle_flash.rotation_degrees.z = randf_range(-45, 45)
 	muzzle_flash.scale = Vector3.ONE * randf_range(0.40, 0.75)
 	muzzle_flash.position = visual.position - weapons[weapon_index].muzzle_position * 0.3
-
 	
-	for n in weapons[weapon_index].shot_count:
+	var w = weapons[weapon_index]
 	
-		raycast.target_position.x = randf_range(-weapons[weapon_index].spread, weapons[weapon_index].spread)
-		raycast.target_position.y = randf_range(-weapons[weapon_index].spread, weapons[weapon_index].spread)
+	for n in w.shot_count:
+		var spread = w.spread + w.accuracy_loss
+		raycast.target_position.x = randf_range(-spread, spread)
+		raycast.target_position.y = randf_range(-spread, spread)
 		
 		raycast.force_raycast_update()
 		
@@ -370,7 +367,7 @@ func play_shoot_effect():
 		
 		# Hitting an enemy
 		if collider.has_method("damage"):
-			collider.damage.rpc(weapons[weapon_index].damage)
+			collider.damage.rpc(w.damage)
 			if collider.is_death():
 				kill_count+=1
 				killed.emit(kill_count)
@@ -386,6 +383,10 @@ func play_shoot_effect():
 		
 		impact_instance.position = raycast.get_collision_point() + (raycast.get_collision_normal() / 10)
 		impact_instance.look_at(camera.global_transform.origin, Vector3.UP, true) 
+		
+	# Update ammo
+	w.shoot()
+	ammo_update()
 
 
 func is_death()->bool:

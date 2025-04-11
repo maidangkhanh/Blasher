@@ -10,6 +10,11 @@ const Player = preload("res://objects/player.tscn")
 const PORT = 9999
 var enet_peer = ENetMultiplayerPeer.new()
 
+signal lobby_connected()
+
+func _ready():
+	lobby_connected.connect(scoreboard.set_ip_address)
+
 func _on_host_button_pressed():
 	main_menu.hide()
 	hud.show()
@@ -21,12 +26,9 @@ func _on_host_button_pressed():
 
 	add_player(multiplayer.get_unique_id())
 
-	upnp_setup()
+	#upnp_setup()
 
 func _on_join_button_pressed():
-	main_menu.hide()
-	hud.show()
-	
 	var address = address_entry.get_text()
 	
 	if address == "":
@@ -34,6 +36,9 @@ func _on_join_button_pressed():
 	
 	enet_peer.create_client(address, PORT)
 	multiplayer.multiplayer_peer = enet_peer
+	
+	main_menu.hide()
+	hud.show()
 
 func add_player(peer_id):
 	var player = Player.instantiate()
@@ -44,7 +49,7 @@ func add_player(peer_id):
 		scoreboard.add_player(player)
 	
 	for n in players.get_children():
-		if not n.is_multiplayer_authority():	
+		if not n.is_multiplayer_authority():
 			n.show_weapon_visual()
 			scoreboard.add_player(n)
 
@@ -70,7 +75,6 @@ func upnp_setup():
 
 	print("Success! Join Address: %s" % upnp.query_external_address())
 
-
 func _on_multiplayer_spawner_spawned(node):
 	if node.is_multiplayer_authority():
 		connect_signals(node)
@@ -81,11 +85,9 @@ func _on_multiplayer_spawner_spawned(node):
 				n.change_weapon_visual.rpc(n.weapon_index)
 				n.show_weapon_visual()
 
-
-
 func connect_signals(node:Player):
-		node.ammo_updated.connect(hud._on_player_ammo_updated)
-		node.reloading_start.connect(hud._on_player_reloading_start)
-		node.reloading_finish.connect(hud._on_player_reloading_finish)
-		node.reload_interupt.connect(hud._on_player_reload_interupt)
-		node.health_updated.connect(hud._on_player_health_updated)
+	node.ammo_updated.connect(hud._on_player_ammo_updated)
+	node.reloading_start.connect(hud._on_player_reloading_start)
+	node.reloading_finish.connect(hud._on_player_reloading_finish)
+	node.reload_interupt.connect(hud._on_player_reload_interupt)
+	node.health_updated.connect(hud._on_player_health_updated)

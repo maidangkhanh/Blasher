@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="Weapon" load_steps=4 format=3 uid="uid://coy1n6vja1krc"]
 
-[ext_resource type="Script" path="res://scripts/weapon.gd" id="1_kutgc"]
+[ext_resource type="Script" uid="uid://bbnqfvgpfo4ax" path="res://scripts/weapon.gd" id="1_kutgc"]
 [ext_resource type="Texture2D" uid="uid://coqb48vy8fjce" path="res://sprites/crosshair-submachine.png" id="1_sdkkq"]
 [ext_resource type="PackedScene" uid="uid://dqxwlahg3i2ay" path="res://models/blaster-submachine.glb" id="1_wvlrc"]
 
@@ -11,12 +11,13 @@ position = Vector3(0, 0.2, 0)
 rotation = Vector3(0, 180, 0)
 muzzle_position = Vector3(0.1, -0.4, 1.5)
 cooldown = 0.1
-max_distance = 50
+max_distance = 100
 damage = 8.0
 spread = 2.0
 shot_count = 1
 reload_time = 1.5
 max_ammo = 20
 recoil_rate = 0.7
+accuracy_recovery_rate = 0.5
 sound_shoot = "sounds/blaster_repeater.ogg"
 crosshair = ExtResource("1_sdkkq")

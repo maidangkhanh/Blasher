@@ -2,6 +2,7 @@ extends Control
 
 @onready var player_score = preload("res://objects/scoreboard_item.tscn")
 @onready var score_talble = $PanelContainer/MarginContainer/ScoreTable
+@onready var ip_address = $PanelContainer/MarginContainer/ScoreTable/IPAddress
 
 func _input(event):
 	if Input.is_action_just_pressed("scoreboard"):
@@ -28,4 +29,6 @@ func update_player(player:Player):
 	var item = get_node(NodePath(player.name))
 	item.set_player_kill(player)
 	item.set_player_death(player)
-	
+
+func set_ip_address(ip):
+	ip_address.text = ip
